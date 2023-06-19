@@ -28,21 +28,22 @@ public class Address {
 	private String civico;
 	private String località;
 	private int cap;
-	private String comune;
 	@Enumerated(EnumType.STRING)
 	private AddressType tipo;
 	@ManyToOne
 	private User user;
+	@ManyToOne
+	private Council comune;
 
-	public Address(String via, String civico, String località, int cap, String comune, AddressType tipo, User user) {
+	public Address(String via, String civico, String località, int cap, AddressType tipo, User user, Council comune) {
 		super();
 		this.via = via;
 		this.civico = civico;
 		this.località = località;
 		this.cap = cap;
-		this.comune = comune;
 		this.tipo = tipo;
 		this.user = user;
+		this.comune = comune;
 	}
 
 }
