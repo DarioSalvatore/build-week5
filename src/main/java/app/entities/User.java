@@ -39,6 +39,8 @@ public class User {
 	private String telefonoContatto;
 	@Enumerated(EnumType.STRING)
 	private UserType tipo;
+	@Enumerated(EnumType.STRING)
+	private UserRole ruolo = UserRole.USER;
 	@OneToMany(mappedBy = "user")
 	private List<Address> indirizzi;
 	@OneToMany(mappedBy = "user")
