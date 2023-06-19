@@ -9,7 +9,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -25,17 +24,12 @@ public class Address {
 	@Id
 	@GeneratedValue
 	private UUID id;
-	@NotNull
 	private String via;
-	@NotNull
 	private String civico;
 	private String località;
-	@NotNull
 	private int cap;
-	@NotNull
 	private String comune;
 	@Enumerated(EnumType.STRING)
-	@NotNull
 	private AddressType tipo;
 	@ManyToOne
 	private Client client;
