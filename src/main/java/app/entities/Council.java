@@ -23,6 +23,8 @@ public class Council {
 	@GeneratedValue
 	private UUID id;
 	private String nome;
+	private int codiceStorico;
+	private int progressivoComune;
 	@ManyToOne
 	private District provincia;
 

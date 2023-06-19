@@ -3,6 +3,7 @@ package app.entities;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -21,9 +22,12 @@ public class District {
 	@Id
 	@GeneratedValue
 	private UUID id;
-	private String nome;
+	@Column(name = "Provincia")
+	private String provincia;
+	@Column(name = "Sigla")
 	private String sigla;
-	private String Regione;
+	@Column(name = "Regione")
+	private String regione;
 	@OneToMany(mappedBy = "provincia")
 	private List<Council> comuni;
 
