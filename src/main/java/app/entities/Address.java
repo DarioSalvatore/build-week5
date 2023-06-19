@@ -32,9 +32,9 @@ public class Address {
 	@Enumerated(EnumType.STRING)
 	private AddressType tipo;
 	@ManyToOne
-	private Client client;
+	private User user;
 
-	public Address(String via, String civico, String località, int cap, String comune, AddressType tipo) {
+	public Address(String via, String civico, String località, int cap, String comune, AddressType tipo, User user) {
 		super();
 		this.via = via;
 		this.civico = civico;
@@ -42,6 +42,7 @@ public class Address {
 		this.cap = cap;
 		this.comune = comune;
 		this.tipo = tipo;
+		this.user = user;
 	}
 
 }
