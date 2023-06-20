@@ -31,4 +31,12 @@ public class District {
 	@OneToMany(mappedBy = "provincia")
 	private List<Council> comuni;
 
+	public District(String provincia, String sigla, String regione, List<Council> comuni) {
+		super();
+		this.provincia = provincia;
+		this.sigla = sigla;
+		this.regione = regione;
+		this.comuni = comuni;
+	}
+
 }
