@@ -22,40 +22,40 @@ import app.entities.Bill;
 import app.services.BillService;
 
 @RestController
-@RequestMapping("/bills")
+@RequestMapping("/users")
 public class BillController {
 	
 	@Autowired
 	BillService billService;
 		
 		//get all bills and order by name 
-		@GetMapping("")
+		@GetMapping("/bills")
 		public Page<Bill> getAllBill(@RequestParam(defaultValue = "0") int page, 
 				@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "name") String sortBy) {
 			return billService.findAll(page, size, sortBy);
 		}
 		
 		//working
-		@PostMapping("")
+		@PostMapping("{billsId}/bills")
 		@ResponseStatus(HttpStatus.CREATED)
 		public Bill saveBill(@RequestBody Bill body){
 			return billService.create(body);
 		}
 		
 		
-		@GetMapping("/{billId}")
-		public Bill getBill(@PathVariable UUID billId) throws NotFoundException {
-			return billService.findById(billId);
+		@GetMapping("/{billsId}/bills")
+		public Bill getBill(@PathVariable UUID billsId) throws NotFoundException {
+			return billService.findById(billsId);
 		}
 		
 		//working
-		@PutMapping("/{billId}")
+		@PutMapping("/{billId}/bills/{billsId}")
 		public Bill updateBill(@PathVariable UUID billId, @RequestBody Bill body) throws Exception {
 			return billService.findByIdAndUpdate(billId, body);
 		}
 		
 		//working
-		@DeleteMapping("/{billId}")
+		@DeleteMapping("/{billId}/id")
 		@ResponseStatus(HttpStatus.NO_CONTENT)
 		public void deleteUser(@PathVariable UUID billId){
 			billService.findByIdAndDelete(billId);
