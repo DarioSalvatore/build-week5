@@ -1,5 +1,7 @@
 package app.services;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +13,19 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import app.entities.Council;
+import app.entities.District;
 import app.repositories.CouncilRepository;
+import app.utils.CSVUtils;
+import jakarta.transaction.Transactional;
 
 @Service
 public class CouncilService {
 
 	@Autowired
 	private CouncilRepository councilRepo;
+
+	@Autowired
+	private DistrictService districtService;
 
 	public Page<Council> findAll(int page, int size, String sortBy) {
 		if (size < 0)
@@ -34,23 +42,52 @@ public class CouncilService {
 	}
 
 	public Council create(Council p) {
-		Council council = new Council(p.getNome(), p.getProvincia(), p.getIndirizzi(), p.getCodiceStorico(),
-				p.getProgressivoComune());
+		Council council = new Council(p.getCodiceStorico(), p.getProgressivoComune(), p.getDenominazione(),
+				p.getProvincia(), p.getIndirizzi());
 		return council;
 	}
 
 	public Council findByIdAndUpdate(UUID id, Council p) throws NotFoundException {
 		Council found = this.findById(id);
 		found.setId(id);
-		found.setNome(p.getNome());
-		found.setProvincia(p.getProvincia());
 		found.setCodiceStorico(p.getCodiceStorico());
 		found.setProgressivoComune(p.getProgressivoComune());
+		found.setDenominazione(p.getDenominazione());
+		found.setProvincia(p.getProvincia());
 		return councilRepo.save(found);
 	}
 
 	public void deleteCouncil(UUID id) {
 		councilRepo.deleteById(id);
+	}
+
+	@Transactional
+	public void importCouncilsFromCSV(String filePath) {
+		List<Council> councils = councilRepo.findAll();
+		if (councils.size() == 0) {
+			try {
+				List<String[]> records = CSVUtils.readCSV(filePath);
+				for (String[] record : records) {
+					if (Arrays.toString(record).contains("Denominazione in italiano")) {
+					} else {
+						System.out.println(Arrays.toString(record));
+						String codiceStorico = record[0].trim();
+						String progressivoComune = record[1].trim();
+						String denominazione = record[2].trim();
+						String provincia = record[3].trim();
+
+						System.out.println("Sono il record " + Arrays.toString(record));
+						System.out.println(codiceStorico + progressivoComune + denominazione + provincia);
+						District district = districtService.findByProvincia(provincia);
+						Council council = new Council(codiceStorico, progressivoComune, denominazione, district);
+						councilRepo.save(council);
+					}
+				}
+			} catch (Exception e) {
+				System.out.println(e + "Error");
+				;
+			}
+		}
 	}
 
 }

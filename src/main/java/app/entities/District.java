@@ -40,10 +40,13 @@ public class District {
 	}
 
 	public District(String sigla, String provincia, String regione) {
-		super();
 		this.provincia = provincia;
 		this.sigla = sigla;
 		this.regione = regione;
+	}
+
+	public District(String provincia) {
+		this.provincia = provincia;
 	}
 
 	@Override

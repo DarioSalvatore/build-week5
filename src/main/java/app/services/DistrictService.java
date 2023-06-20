@@ -37,6 +37,11 @@ public class DistrictService {
 				.orElseThrow(() -> new app.exceptions.NotFoundException("Indirizzo non trovato!"));
 	}
 
+	public District findByProvincia(String provincia) throws NotFoundException {
+		return districtRepo.findByProvincia(provincia)
+				.orElseThrow(() -> new app.exceptions.NotFoundException("Provincia non trovato!"));
+	}
+
 	public District create(District p) {
 		District district = new District(p.getProvincia(), p.getSigla(), p.getRegione());
 		System.out.println("Provincia Creata");

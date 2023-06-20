@@ -22,22 +22,30 @@ public class Council {
 	@Id
 	@GeneratedValue
 	private UUID id;
-	private String nome;
-	private int codiceStorico;
-	private int progressivoComune;
+	private String codiceStorico;
+	private String progressivoComune;
+	private String denominazione;
 	@ManyToOne
 	private District provincia;
 
 	@OneToMany(mappedBy = "comune")
 	private List<Address> indirizzi;
 
-	public Council(String nome, District provincia, List<Address> indirizzi, int codiceStorico, int progressivoComune) {
+	public Council(String codiceStorico, String progressivoComune, String denominazione, District provincia,
+			List<Address> indirizzi) {
 		super();
-		this.nome = nome;
-		this.provincia = provincia;
-		this.indirizzi = indirizzi;
 		this.codiceStorico = codiceStorico;
 		this.progressivoComune = progressivoComune;
+		this.denominazione = denominazione;
+		this.provincia = provincia;
+		this.indirizzi = indirizzi;
 	}
 
+	public Council(String codiceStorico, String progressivoComune, String denominazione, District provincia) {
+		super();
+		this.codiceStorico = codiceStorico;
+		this.progressivoComune = progressivoComune;
+		this.denominazione = denominazione;
+		this.provincia = provincia;
+	}
 }

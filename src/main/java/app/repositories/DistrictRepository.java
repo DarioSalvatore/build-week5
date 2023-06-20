@@ -1,5 +1,6 @@
 package app.repositories;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,5 +10,5 @@ import app.entities.District;
 
 @Repository
 public interface DistrictRepository extends JpaRepository<District, UUID> {
-
+	Optional<District> findByProvincia(String provincia);
 }
