@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.entities.Bill;
+import app.exceptions.NotFoundException;
 import app.services.BillService;
 
 @RestController

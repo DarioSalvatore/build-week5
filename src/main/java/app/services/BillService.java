@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import app.entities.Bill;
+import app.exceptions.NotFoundException;
 import app.repositories.BillRepository;
 
 
