@@ -50,7 +50,6 @@ public class User {
 			LocalDate dataUltimoContatto, double fatturatoAnnuale, String pec, String telefono, String mailContatto,
 			String nomeContatto, String cognomeContatto, String telefonoContatto, UserType tipo,
 			List<Address> indirizzi, List<Bill> fatture) {
-		super();
 		this.ragioneSociale = ragioneSociale;
 		this.partitaIva = partitaIva;
 		this.email = email;
