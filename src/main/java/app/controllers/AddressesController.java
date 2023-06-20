@@ -21,7 +21,7 @@ import app.repositories.AddressesRepository;
 import app.services.AddressesService;
 
 @RestController
-@RequestMapping("/addresses")
+@RequestMapping("/users/addresses")
 public class AddressesController {
 
 	@Autowired
@@ -29,7 +29,7 @@ public class AddressesController {
 	@Autowired
 	private AddressesRepository addressesRepo;
 
-	@GetMapping("/bills")
+	@GetMapping("")
 	public Page<Address> getAllAddresses(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "name") String sortBy) {
 		return addressesService.findAll(page, size, sortBy);

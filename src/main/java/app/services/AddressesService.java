@@ -9,11 +9,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import app.entities.Address;
 import app.payloads.AddressPayload;
 import app.repositories.AddressesRepository;
 
+@Service
 @Component
 public class AddressesService {
 	@Autowired
