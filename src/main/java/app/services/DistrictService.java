@@ -1,5 +1,7 @@
 package app.services;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +10,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
 import app.entities.District;
 import app.repositories.DistrictRepository;
+import app.utils.CSVUtils;
+import jakarta.transaction.Transactional;
 
+@Service
 public class DistrictService {
 
 	@Autowired
@@ -32,8 +38,10 @@ public class DistrictService {
 	}
 
 	public District create(District p) {
-		District district = new District(p.getProvincia(), p.getSigla(), p.getRegione(), p.getComuni());
-		return district;
+		District district = new District(p.getProvincia(), p.getSigla(), p.getRegione());
+		System.out.println("Provincia Creata");
+		return districtRepo.save(district);
+
 	}
 
 	public District findByIdAndUpdate(UUID id, District p) throws NotFoundException {
@@ -48,6 +56,33 @@ public class DistrictService {
 
 	public void deleteDistrict(UUID id) {
 		districtRepo.deleteById(id);
+	}
+
+	@Transactional
+	public void importDistrictsFromCSV(String filePath) {
+		List<District> districts = districtRepo.findAll();
+		if (districts.size() == 0) {
+			try {
+				List<String[]> records = CSVUtils.readCSV(filePath);
+				for (String[] record : records) {
+					if (Arrays.toString(record).contains("Sigla")) {
+					} else {
+						System.out.println(Arrays.toString(record));
+						String sigla = record[0].trim();
+						String provincia = record[1].trim();
+						String regione = record[2].trim();
+
+						System.out.println("Sono il record " + Arrays.toString(record));
+						System.out.println(sigla + provincia + regione);
+						District district = new District(sigla, provincia, regione);
+						districtRepo.save(district);
+					}
+				}
+			} catch (Exception e) {
+				System.out.println(e + "Error");
+				;
+			}
+		}
 	}
 
 }

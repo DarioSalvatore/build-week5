@@ -39,4 +39,17 @@ public class District {
 		this.comuni = comuni;
 	}
 
+	public District(String sigla, String provincia, String regione) {
+		super();
+		this.provincia = provincia;
+		this.sigla = sigla;
+		this.regione = regione;
+	}
+
+	@Override
+	public String toString() {
+		return "District [id=" + id + ", provincia=" + provincia + ", sigla=" + sigla + ", regione=" + regione
+				+ ", comuni=" + comuni + "]";
+	}
+
 }
