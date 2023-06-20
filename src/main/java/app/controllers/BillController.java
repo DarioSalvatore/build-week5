@@ -36,29 +36,29 @@ public class BillController {
 			return billService.findAll(page, size, sortBy);
 		}
 		
-		//working
-		@PostMapping("{billsId}/bills")
+
+		@PostMapping("{userId}/bills")
 		@ResponseStatus(HttpStatus.CREATED)
-		public Bill saveBill(@RequestBody Bill body){
+		public Bill saveBill(@PathVariable UUID userId , @RequestBody Bill body){
 			return billService.create(body);
 		}
 		
 		
-		@GetMapping("/{billsId}/bills")
-		public Bill getBill(@PathVariable UUID billsId) throws NotFoundException {
-			return billService.findById(billsId);
+		@GetMapping("/{userId}/bills")
+		public Bill getBill(@PathVariable UUID userId) throws NotFoundException {
+			return billService.findById(userId);
 		}
 		
-		//working
-		@PutMapping("/{billId}/bills/{billsId}")
-		public Bill updateBill(@PathVariable UUID billId, @RequestBody Bill body) throws Exception {
+
+		@PutMapping("/{userId}/bills/{billsId}")
+		public Bill updateBill(@PathVariable UUID userId, @RequestBody Bill body, @PathVariable UUID billId) throws Exception {
 			return billService.findByIdAndUpdate(billId, body);
 		}
 		
 		//working
-		@DeleteMapping("/{billId}/id")
+		@DeleteMapping("/{userId}/bills/{billsId}")
 		@ResponseStatus(HttpStatus.NO_CONTENT)
-		public void deleteUser(@PathVariable UUID billId){
+		public void deleteUser(@PathVariable UUID userId, @PathVariable UUID billId){
 			billService.findByIdAndDelete(billId);
 		}
 }
