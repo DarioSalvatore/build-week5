@@ -9,6 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -56,9 +57,9 @@ public class User implements UserDetails {
 	private UserType tipo;
 	@Enumerated(EnumType.STRING)
 	private UserRole ruolo = UserRole.USER;
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Address> indirizzi;
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Bill> fatture;
 
 	public User(String ragioneSociale, String partitaIva, String email, LocalDate dataInserimento,
