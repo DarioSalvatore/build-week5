@@ -1,5 +1,5 @@
 package app.entities;
 
 public enum StatusBill {
-	COMPLETE,PARTIAL
+	PAGATO, NON_PAGATO
 }
