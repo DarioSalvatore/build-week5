@@ -31,11 +31,13 @@ public class Council {
 	@OneToMany(mappedBy = "comune")
 	private List<Address> indirizzi;
 
-	public Council(String nome, District provincia, List<Address> indirizzi) {
+	public Council(String nome, District provincia, List<Address> indirizzi, int codiceStorico, int progressivoComune) {
 		super();
 		this.nome = nome;
 		this.provincia = provincia;
 		this.indirizzi = indirizzi;
+		this.codiceStorico = codiceStorico;
+		this.progressivoComune = progressivoComune;
 	}
 
 }

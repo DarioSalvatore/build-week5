@@ -15,41 +15,41 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import app.entities.Council;
-import app.repositories.CouncilRepository;
-import app.services.CouncilService;
+import app.entities.District;
+import app.repositories.DistrictRepository;
+import app.services.DistrictService;
 
 @RestController
-@RequestMapping("/users/addresses/councils")
-public class CouncilController {
+@RequestMapping("/users/addresses/councils/districts")
+public class DistrictController {
 
 	@Autowired
-	private CouncilService councilService;
+	private DistrictService districtService;
 
 	@Autowired
-	private CouncilRepository councilRepo;
+	private DistrictRepository districtRepo;
 
 	@GetMapping("")
-	public Page<Council> getAllCouncil(@RequestParam(defaultValue = "0") int page,
+	public Page<District> getAllDistrict(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "name") String sortBy) {
-		return councilService.findAll(page, size, sortBy);
+		return districtService.findAll(page, size, sortBy);
 	}
 
 	@GetMapping("/{id}")
-	public Council getById(@PathVariable UUID id) throws Exception {
-		return councilService.findById(id);
+	public District getById(@PathVariable UUID id) throws Exception {
+		return districtService.findById(id);
 	}
 
 	@PostMapping("")
-	public Council saveCouncil(@RequestBody Council body) {
-		Council council = councilService.create(body);
-		return councilRepo.save(council);
+	public District saveCouncil(@RequestBody District body) {
+		District district = districtService.create(body);
+		return districtRepo.save(district);
 	}
 
 	@PutMapping("/{id}")
-	public void findByIdAndUpdate(@PathVariable UUID id, @RequestBody Council body) {
+	public void findByIdAndUpdate(@PathVariable UUID id, @RequestBody District body) {
 		try {
-			councilService.findByIdAndUpdate(id, body);
+			districtService.findByIdAndUpdate(id, body);
 		} catch (NotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -57,8 +57,7 @@ public class CouncilController {
 	}
 
 	@DeleteMapping("/{id}")
-	public void deleteCouncil(@PathVariable UUID id) {
-		councilService.deleteCouncil(id);
+	public void deleteDistrict(@PathVariable UUID id) {
+		districtService.deleteDistrict(id);
 	}
-
 }
