@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import app.entities.Bill;
 import app.entities.User;
+import app.payloads.UserPayload;
 import app.services.UserService;
 
 @RestController
@@ -37,7 +38,7 @@ public class UserController {
 	// Versione 2 e payload (POST: http://localhost:3001/users) OK
 	@PostMapping("")
 	@ResponseStatus(HttpStatus.CREATED)
-	public User saveUser(@RequestBody @Validated User body) {
+	public User saveUser(@RequestBody @Validated UserPayload body) {
 		return userService.create(body);
 	}
 
@@ -48,7 +49,7 @@ public class UserController {
 		return userService.findById(idUser);
 	}
 
-	// ------------ GET PER OTTENERE I DISPOSITIVI DEL SINGOLO USER -------------
+	// ------------ GET PER OTTENERE LE FATTURE DEL SINGOLO USER -------------
 	// Versione 1 (GET: http://localhost:3001/users/{idUser}/dispositivi) OK
 	@GetMapping("/{idUser}/bills")
 	public List<Bill> findBillsUser(@PathVariable UUID idUser) {

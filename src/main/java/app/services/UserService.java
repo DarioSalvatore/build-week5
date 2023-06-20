@@ -12,6 +12,7 @@ import app.entities.Bill;
 import app.entities.User;
 import app.exceptions.BadRequestException;
 import app.exceptions.NotFoundException;
+import app.payloads.UserPayload;
 import app.repositories.UserRepository;
 
 @Service
@@ -28,16 +29,16 @@ public class UserService {
 
 	// -------------------------- POST SU USERS --------------------------------
 	// Versione 3 con controllo e payload (POST: http://localhost:3001/users) OK
-	public User create(User u) {
+	public User create(UserPayload u) {
 		userRepo.findByEmail(u.getEmail()).ifPresent(user -> {
 			throw new BadRequestException(
 					"ATTENZIONE!!! L'email con la quale stai cercando di registarti è già in uso da un altro user");
 		});
 		List<Bill> fatture = new ArrayList<>();
 		List<Address> indirizzi = new ArrayList<>();
-		User newUser = new User(u.getRagioneSociale(), u.getPartitaIva(), u.getEmail(), u.getDataInserimento(),
-				u.getDataUltimoContatto(), u.getFatturatoAnnuale(), u.getPec(), u.getTelefono(), u.getMailContatto(),
-				u.getNomeContatto(), u.getCognomeContatto(), u.getTelefonoContatto(), u.getTipo(), indirizzi, fatture);
+		User newUser = new User(u.getRagioneSociale(), u.getPartitaIva(), u.getEmail(), u.getFatturatoAnnuale(),
+				u.getPec(), u.getTelefono(), u.getMailContatto(), u.getPassword(), u.getNomeContatto(),
+				u.getCognomeContatto(), u.getTelefonoContatto(), u.getTipo(), indirizzi, fatture);
 		return userRepo.save(newUser);
 	}
 
@@ -63,6 +64,7 @@ public class UserService {
 		found.setPec(u.getPec());
 		found.setTelefono(u.getTelefono());
 		found.setMailContatto(u.getMailContatto());
+		found.setPassword(u.getPassword());
 		found.setNomeContatto(u.getNomeContatto());
 		found.setCognomeContatto(u.getCognomeContatto());
 		found.setTelefono(u.getTelefono());
