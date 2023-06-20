@@ -12,7 +12,7 @@ public class UserPayload {
 	@NotNull(message = "ATTENZIONE!!! Il campo Ragione Sociale è obbligatorio")
 	private String ragioneSociale;
 	@NotNull(message = "ATTENZIONE!!! Il campo partita Iva è obbligatorio")
-	private Long partitaIva;
+	private String partitaIva;
 	@NotNull(message = "ATTENZIONE!!! Il campo Email è obbligatorio")
 	private String email;
 	@NotNull(message = "ATTENZIONE!!! Il campo Fatturato Annuale è obbligatorio")

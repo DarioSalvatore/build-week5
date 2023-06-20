@@ -33,7 +33,7 @@ public class User implements UserDetails {
 	@Column(name = "ragione_sociale")
 	private String ragioneSociale;
 	@Column(name = "partitta_iva")
-	private Long partitaIva;
+	private String partitaIva;
 	private String email;
 	@Column(name = "data_inserimento")
 	private LocalDate dataInserimento;
@@ -61,7 +61,7 @@ public class User implements UserDetails {
 	@OneToMany(mappedBy = "user")
 	private List<Bill> fatture;
 
-	public User(String ragioneSociale, Long partitaIva, String email, LocalDate dataInserimento,
+	public User(String ragioneSociale, String partitaIva, String email, LocalDate dataInserimento,
 			LocalDate dataUltimoContatto, double fatturatoAnnuale, String pec, String telefono, String mailContatto,
 			String password, String nomeContatto, String cognomeContatto, String telefonoContatto, UserType tipo,
 			List<Address> indirizzi, List<Bill> fatture) {
@@ -83,7 +83,7 @@ public class User implements UserDetails {
 		this.fatture = fatture;
 	}
 
-	public User(String ragioneSociale, Long partitaIva, String email, double fatturatoAnnuale, String pec,
+	public User(String ragioneSociale, String partitaIva, String email, double fatturatoAnnuale, String pec,
 			String telefono, String mailContatto, String password, String nomeContatto, String cognomeContatto,
 			String telefonoContatto, UserType tipo, List<Address> indirizzi, List<Bill> fatture) {
 		super();
