@@ -1,12 +1,12 @@
 package app.controllers;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,46 +19,71 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.entities.Bill;
+import app.entities.StatusBill;
 import app.exceptions.NotFoundException;
 import app.services.BillService;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/bills")
 public class BillController {
-	
+
 	@Autowired
 	BillService billService;
-		
-		//get all bills and order by name 
-		@GetMapping("/bills")
-		public Page<Bill> getAllBill(@RequestParam(defaultValue = "0") int page, 
-				@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "name") String sortBy) {
-			return billService.findAll(page, size, sortBy);
-		}
-		
 
-		@PostMapping("{userId}/bills")
-		@ResponseStatus(HttpStatus.CREATED)
-		public Bill saveBill(@PathVariable UUID userId , @RequestBody Bill body){
-			return billService.create(body);
-		}
-		
-		
-		@GetMapping("/{userId}/bills")
-		public Bill getBill(@PathVariable UUID userId) throws NotFoundException {
-			return billService.findById(userId);
-		}
-		
+	// get all bills and order by name
+	@GetMapping("")
+	public Page<Bill> getAllBill(@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "name") String sortBy) {
+		return billService.findAll(page, size, sortBy);
+	}
 
-		@PutMapping("/{userId}/bills/{billsId}")
-		public Bill updateBill(@PathVariable UUID userId, @RequestBody Bill body, @PathVariable UUID billId) throws Exception {
-			return billService.findByIdAndUpdate(billId, body);
-		}
-		
-		//working
-		@DeleteMapping("/{userId}/bills/{billsId}")
-		@ResponseStatus(HttpStatus.NO_CONTENT)
-		public void deleteUser(@PathVariable UUID userId, @PathVariable UUID billId){
-			billService.findByIdAndDelete(billId);
-		}
+	@PostMapping("")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Bill saveBill(@PathVariable UUID userId, @RequestBody Bill body) {
+		return billService.create(body);
+	}
+
+	@GetMapping("/{billsId}")
+	public Bill getBill(@PathVariable UUID userId) throws NotFoundException {
+		return billService.findById(userId);
+	}
+
+	@PutMapping("/{billsId}")
+	public Bill updateBill(@PathVariable UUID userId, @RequestBody Bill body, @PathVariable UUID billId)
+			throws Exception {
+		return billService.findByIdAndUpdate(billId, body);
+	}
+
+	// working
+	@DeleteMapping("/{billsId}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteUser(@PathVariable UUID userId, @PathVariable UUID billId) {
+		billService.findByIdAndDelete(billId);
+	}
+
+	@GetMapping("bills/user")
+	public List<Bill> getBillsByUser(@RequestParam("user") UUID userId) {
+		return billService.getBillsByUser(userId);
+	}
+
+	@GetMapping("bills/status")
+	public List<Bill> getBillsByStatusBill(@RequestParam("status") StatusBill status) {
+		return billService.getBillsByStatusBill(status);
+	}
+
+	@GetMapping("bills/date")
+	public List<Bill> getBillsByDate(@RequestParam("date") String date) {
+		return billService.getBillsByDate(LocalDate.parse(date));
+	}
+
+	@GetMapping("bills/year")
+	public List<Bill> getBillsByYear(@RequestParam("year") int year) {
+		return billService.getBillsByYear(year);
+	}
+
+	@GetMapping("bills/amount")
+	public List<Bill> getBillsByAmount(@RequestParam("min") double min, @RequestParam("max") double max) {
+		return billService.getBillsByAmount(min, max);
+	}
+
 }
