@@ -31,7 +31,7 @@ public class AddressesController {
 
 	@GetMapping("")
 	public Page<Address> getAllAddresses(@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "name") String sortBy) {
+			@RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "name") String sortBy) {
 		return addressesService.findAll(page, size, sortBy);
 	}
 

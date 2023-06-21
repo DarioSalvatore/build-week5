@@ -3,7 +3,6 @@ package app.utils;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import com.opencsv.CSVReader;
@@ -17,7 +16,7 @@ public class CSVUtils {
 			String[] record;
 			while ((record = csvReader.readNext()) != null) {
 				String[] parsedRecord = parseCSVRecord(record[0]);
-				System.out.println(Arrays.toString(parsedRecord));
+//				
 				records.add(parsedRecord);
 			}
 		} catch (CsvValidationException e) {

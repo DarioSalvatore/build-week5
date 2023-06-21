@@ -1,9 +1,12 @@
 package app.controllers;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -13,12 +16,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.entities.Bill;
 import app.entities.User;
 import app.payloads.UserPayload;
+import app.repositories.UserRepository;
 import app.services.UserService;
 
 @RestController
@@ -27,11 +32,48 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private UserRepository userRepo;
+
 	// -------------------------- GET SU USERS -----------------------------
 	// Versione 1 (GET: http://localhost:3001/users) OK
 	@GetMapping("")
-	public List<User> getUsers() {
-		return userService.find();
+//	public List<User> getUsers() {
+//		return userService.find();
+//	}
+
+	public Page<User> getAllUsers(@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "name") String sortBy) {
+		return userService.find(page, size, sortBy);
+	}
+
+	// FatturatoAnnuale maggiore di n : (GET:
+	// http://localhost:3001/users/filter?fatturato=180)
+	@GetMapping("/filter")
+	public List<User> findByFatturatoAnnuale(@RequestParam("fatturato") double fatturatoAnnuale) {
+		return userService.getUserByFatturatoAnnuale(fatturatoAnnuale);
+	}
+
+	// filtra per data (GET: http://localhost:3001/users/date?startDate=1962-11-30)
+	@GetMapping("/date")
+	public List<User> findByDate(
+			@RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataInserimento) {
+		return userRepo.findBydataInserimento(dataInserimento);
+	}
+
+	// filtra per dataUltimoContatto
+	// http://localhost:3001/users/dateLastContact?dataUltimoContatto=2000-09-01
+	@GetMapping("/dateLastContact")
+	public List<User> findBydataUltimoContatto(
+			@RequestParam("dataUltimoContatto") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataUltimoContatto) {
+		return userRepo.findBydataUltimoContatto(dataUltimoContatto);
+	}
+
+	// filtra per nome sia camel case che lower case
+	// http://localhost:3001/users/name?name=elsa
+	@GetMapping("/name")
+	public List<User> findByName(@RequestParam("name") String name) {
+		return userRepo.findBynomeContattoIgnoreCase(name);
 	}
 
 	// -------------------------- POST SU USERS --------------------------------

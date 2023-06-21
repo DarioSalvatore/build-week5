@@ -29,7 +29,7 @@ public class CouncilService {
 
 	public Page<Council> findAll(int page, int size, String sortBy) {
 		if (size < 0)
-			size = 10;
+			size = 20;
 		if (size > 100)
 			size = 100;
 		Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -67,22 +67,27 @@ public class CouncilService {
 		if (councils.size() == 0) {
 			try {
 				List<String[]> records = CSVUtils.readCSV(filePath);
+				System.out.println("Numero di record: " + records.size());
 				for (String[] record : records) {
-					if (Arrays.toString(record).contains("Denominazione in italiano")) {
+					if (Arrays.toString(record).contains("Denominazione")) {
 					} else {
-						System.out.println(Arrays.toString(record));
+//					System.out.println("Sono il record " + Arrays.toString(record));
+
 						String codiceStorico = record[0].trim();
 						String progressivoComune = record[1].trim();
 						String denominazione = record[2].trim();
 						String provincia = record[3].trim();
-
-						System.out.println("Sono il record " + Arrays.toString(record));
-						System.out.println(codiceStorico + progressivoComune + denominazione + provincia);
+//					System.out.println("Sono la provincia " + provincia);
 						District district = districtService.findByProvincia(provincia);
 						Council council = new Council(codiceStorico, progressivoComune, denominazione, district);
+						System.out.println("Prima del save, ID " + council.getId() + " cod. storico "
+								+ council.getCodiceStorico() + " Prog. Comune " + council.getProgressivoComune());
 						councilRepo.save(council);
+						System.out.println("Dopo il save, ID " + council.getId() + " cod. storico "
+								+ council.getCodiceStorico() + " Prog. Comune " + council.getProgressivoComune());
 					}
 				}
+
 			} catch (Exception e) {
 				System.out.println(e + "Error");
 				;
