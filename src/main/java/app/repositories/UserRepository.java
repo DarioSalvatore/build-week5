@@ -20,5 +20,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
 	List<User> findBydataInserimento(LocalDate dataInserimento);
 	
+	List<User> findBydataUltimoContatto(LocalDate dataUltimoContatto);
+	
 	
 }

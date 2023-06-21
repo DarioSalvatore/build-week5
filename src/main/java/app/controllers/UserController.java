@@ -54,6 +54,12 @@ public class UserController {
 				return userRepo.findBydataInserimento(dataInserimento);
 	}
 	
+	
+	@GetMapping("/dateLastContact")
+	public List<User> findBydataUltimoContatto(@RequestParam("dataUltimoContatto") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataUltimoContatto){
+		return  userRepo.findBydataUltimoContatto(dataUltimoContatto);	
+	}
+	
 
 	// -------------------------- POST SU USERS --------------------------------
 	// Versione 2 e payload (POST: http://localhost:3001/users) OK
