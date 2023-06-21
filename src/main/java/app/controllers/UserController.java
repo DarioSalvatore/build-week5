@@ -1,9 +1,11 @@
 package app.controllers;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import app.entities.Bill;
 import app.entities.User;
 import app.payloads.UserPayload;
+import app.repositories.UserRepository;
 import app.services.UserService;
 
 @RestController
@@ -27,6 +30,9 @@ import app.services.UserService;
 public class UserController {
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private UserRepository userRepo;
 
 	// -------------------------- GET SU USERS -----------------------------
 	// Versione 1 (GET: http://localhost:3001/users) OK
@@ -35,10 +41,19 @@ public class UserController {
 		return userService.find();
 	}
 	
+	//FatturatoAnnuale maggiore di n : (GET: http://localhost:3001/users/filter?fatturato=180)
 	@GetMapping("/filter")
 	public List<User> findByFatturatoAnnuale(@RequestParam("fatturato") double fatturatoAnnuale){
 		return userService.getUserByFatturatoAnnuale(fatturatoAnnuale);
 	}
+	
+	
+	// filtra per data (GET: http://localhost:3001/users/date?startDate=1962-11-30)
+	@GetMapping("/date")
+	public List<User> findByDate(@RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataInserimento){
+				return userRepo.findBydataInserimento(dataInserimento);
+	}
+	
 
 	// -------------------------- POST SU USERS --------------------------------
 	// Versione 2 e payload (POST: http://localhost:3001/users) OK

@@ -93,7 +93,6 @@ public class UserService {
 	}
 
 	public List<User> getUserByFatturatoAnnuale(double fatturatoAnnuale) {
-		
 		return userRepo.findByFatturatoAnnualeGreaterThanEqual(fatturatoAnnuale);
 	}
 
