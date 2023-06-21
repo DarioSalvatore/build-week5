@@ -64,12 +64,13 @@ public class BillController {
 		billService.findByIdAndDelete(billId);
 	}
 
-	@GetMapping("bills/user")
+	@GetMapping("/user")
 	public List<Bill> getBillsByUser(@RequestParam("user") UUID userId) {
 		return billService.getBillsByUser(userId);
 	}
 
-	@GetMapping("bills/status")
+	// OK
+	@GetMapping("/status")
 	public List<Bill> getBillsByStatusBill(@RequestParam("status") StatusBill status) {
 		return billService.getBillsByStatusBill(status);
 	}
