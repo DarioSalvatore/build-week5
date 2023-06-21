@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import app.entities.User;
@@ -21,6 +22,10 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 	List<User> findBydataInserimento(LocalDate dataInserimento);
 	
 	List<User> findBydataUltimoContatto(LocalDate dataUltimoContatto);
+	
+	@Query("SELECT u FROM User u WHERE lower(u.nomeContatto) LIKE lower(concat('%', :nomeContatto, '%')) "
+			+ "OR lower(u.nomeContatto) LIKE lower(concat('%', initcap(:nomeContatto), '%'))")
+	List<User> findBynomeContattoIgnoreCase(String nomeContatto);
 	
 	
 }

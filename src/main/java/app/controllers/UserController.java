@@ -54,11 +54,22 @@ public class UserController {
 				return userRepo.findBydataInserimento(dataInserimento);
 	}
 	
-	
+	//filtra per dataUltimoContatto http://localhost:3001/users/dateLastContact?dataUltimoContatto=2000-09-01
 	@GetMapping("/dateLastContact")
 	public List<User> findBydataUltimoContatto(@RequestParam("dataUltimoContatto") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataUltimoContatto){
 		return  userRepo.findBydataUltimoContatto(dataUltimoContatto);	
 	}
+	
+	//filtra per nome sia camel case che lower case http://localhost:3001/users/name?name=elsa
+	@GetMapping("/name")
+	public List<User> findByName(@RequestParam("name") String name){
+		return userRepo.findBynomeContattoIgnoreCase(name);
+	}
+	
+	
+	
+	
+	
 	
 
 	// -------------------------- POST SU USERS --------------------------------
