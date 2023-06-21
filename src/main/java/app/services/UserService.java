@@ -92,4 +92,9 @@ public class UserService {
 		return found.getFatture();
 	}
 
+	public List<User> getUserByFatturatoAnnuale(double fatturatoAnnuale) {
+		
+		return userRepo.findByFatturatoAnnualeGreaterThanEqual(fatturatoAnnuale);
+	}
+
 }

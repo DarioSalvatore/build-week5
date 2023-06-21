@@ -1,5 +1,6 @@
 package app.repositories;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,4 +14,6 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 	// La versione 1 non aveva questo metodo perché non c'era un controllo nel
 	// metodo create del service
 	Optional<User> findByEmail(String email);
+
+	List<User> findByFatturatoAnnualeGreaterThanEqual(double fatturatoAnnuale);
 }

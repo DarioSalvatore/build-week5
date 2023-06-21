@@ -42,7 +42,8 @@ public class UserRunner implements CommandLineRunner {
 							.toLocalDate();
 					LocalDate dataUltimoContatto = faker.date().birthday().toInstant().atZone(ZoneId.systemDefault())
 							.toLocalDate();
-					double fatturatoAnnuale = random.nextDouble();
+					double scalingFactor = 100.0;
+					double fatturatoAnnuale = scalingFactor*random.nextDouble()+100;
 					String pec = faker.internet().emailAddress();
 					String telefono = faker.phoneNumber().phoneNumber();
 					String mailContatto = faker.internet().emailAddress();
