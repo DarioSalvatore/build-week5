@@ -33,7 +33,7 @@ public class User implements UserDetails {
 	private UUID id;
 	@Column(name = "ragione_sociale")
 	private String ragioneSociale;
-	@Column(name = "partitta_iva")
+	@Column(name = "partita_iva")
 	private String partitaIva;
 	private String email;
 	@Column(name = "data_inserimento")

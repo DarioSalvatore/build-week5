@@ -38,12 +38,8 @@ public class UserController {
 	// -------------------------- GET SU USERS -----------------------------
 	// Versione 1 (GET: http://localhost:3001/users) OK
 	@GetMapping("")
-//	public List<User> getUsers() {
-//		return userService.find();
-//	}
-
 	public Page<User> getAllUsers(@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "name") String sortBy) {
+			@RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "ragioneSociale") String sortBy) {
 		return userService.find(page, size, sortBy);
 	}
 
