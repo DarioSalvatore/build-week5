@@ -48,4 +48,8 @@ public class Council {
 		this.denominazione = denominazione;
 		this.provincia = provincia;
 	}
+
+	public Council(String denominazione) {
+		this.denominazione = denominazione;
+	}
 }
