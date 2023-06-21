@@ -62,6 +62,10 @@ public class BillService {
 		billRepo.delete(found);
 	}
 
+	public long count() {
+		return billRepo.count();
+	}
+
 	public List<Bill> getBillsByUser(UUID id) {
 		return billRepo.findByUser(id);
 	}
