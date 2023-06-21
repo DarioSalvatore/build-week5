@@ -31,7 +31,7 @@ public class DistrictController {
 
 	@GetMapping("")
 	public Page<District> getAllDistrict(@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "name") String sortBy) {
+			@RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "name") String sortBy) {
 		return districtService.findAll(page, size, sortBy);
 	}
 

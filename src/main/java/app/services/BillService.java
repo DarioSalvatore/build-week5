@@ -13,30 +13,31 @@ import app.entities.Bill;
 import app.exceptions.NotFoundException;
 import app.repositories.BillRepository;
 
-
 @Service
 public class BillService {
 	@Autowired
 	private BillRepository billRepo;
-	
+
 	// 1. create Bill
 	public Bill create(Bill u) {
 		return billRepo.save(u);
 	}
+
 	// 2. search all Bills
-	public Page<Bill> findAll(int page, int size, String sortBy){
-		if (size<0) size = 10;
-		if (size>100) size = 100;
-		Pageable pageable = PageRequest.of(page, size,Sort.by(sortBy));
+	public Page<Bill> findAll(int page, int size, String sortBy) {
+		if (size < 0)
+			size = 20;
+		if (size > 100)
+			size = 100;
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
 		return billRepo.findAll(pageable);
 	}
-	
-	//3 search Bills by id
+
+	// 3 search Bills by id
 	public Bill findById(UUID id) throws NotFoundException {
 		return billRepo.findById(id).orElseThrow(() -> new NotFoundException("Bill not found!"));
 	}
 
-	
 	// 4. find by id and update
 	public Bill findByIdAndUpdate(UUID id, Bill body) throws NotFoundException {
 		Bill found = this.findById(id);
@@ -51,7 +52,8 @@ public class BillService {
 
 		return billRepo.save(found);
 	}
-	//5. find by id and delete
+
+	// 5. find by id and delete
 	public void findByIdAndDelete(UUID id) throws NotFoundException {
 		Bill found = this.findById(id);
 		billRepo.delete(found);
