@@ -64,35 +64,35 @@ public class CouncilService {
 	@Transactional
 	public void importCouncilsFromCSV(String filePath) {
 		List<Council> councils = councilRepo.findAll();
-//		if (councils.size() == 0) {
-		try {
-			List<String[]> records = CSVUtils.readCSV(filePath);
-			System.out.println("Numero di record: " + records.size());
-			for (String[] record : records) {
-				if (Arrays.toString(record).contains("Denominazione")) {
-				} else {
+		if (councils.size() == 0) {
+			try {
+				List<String[]> records = CSVUtils.readCSV(filePath);
+				System.out.println("Numero di record: " + records.size());
+				for (String[] record : records) {
+					if (Arrays.toString(record).contains("Denominazione")) {
+					} else {
 //					System.out.println("Sono il record " + Arrays.toString(record));
 
-					String codiceStorico = record[0].trim();
-					String progressivoComune = record[1].trim();
-					String denominazione = record[2].trim();
-					String provincia = record[3].trim();
+						String codiceStorico = record[0].trim();
+						String progressivoComune = record[1].trim();
+						String denominazione = record[2].trim();
+						String provincia = record[3].trim();
 //					System.out.println("Sono la provincia " + provincia);
-					District district = districtService.findByProvincia(provincia);
-					Council council = new Council(codiceStorico, progressivoComune, denominazione, district);
-					System.out.println("Prima del save, ID " + council.getId() + " cod. storico "
-							+ council.getCodiceStorico() + " Prog. Comune " + council.getProgressivoComune());
-					councilRepo.save(council);
-					System.out.println("Dopo il save, ID " + council.getId() + " cod. storico "
-							+ council.getCodiceStorico() + " Prog. Comune " + council.getProgressivoComune());
+						District district = districtService.findByProvincia(provincia);
+						Council council = new Council(codiceStorico, progressivoComune, denominazione, district);
+						System.out.println("Prima del save, ID " + council.getId() + " cod. storico "
+								+ council.getCodiceStorico() + " Prog. Comune " + council.getProgressivoComune());
+						councilRepo.save(council);
+						System.out.println("Dopo il save, ID " + council.getId() + " cod. storico "
+								+ council.getCodiceStorico() + " Prog. Comune " + council.getProgressivoComune());
+					}
 				}
-			}
 
-		} catch (Exception e) {
-			System.out.println(e + "Error");
-			;
+			} catch (Exception e) {
+				System.out.println(e + "Error");
+				;
+			}
 		}
-//		}
 	}
 
 }
