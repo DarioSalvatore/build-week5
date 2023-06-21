@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import app.entities.Address;
@@ -23,8 +27,17 @@ public class UserService {
 
 	// -------------------------- GET SU USERS -----------------------------
 	// Versione 1 (GET: http://localhost:3001/users) OK
-	public List<User> find() {
-		return userRepo.findAll();
+//	public List<User> find() {
+//		return userRepo.findAll();
+//	}
+
+	public Page<User> find(int page, int size, String sortBy) {
+		if (size < 0)
+			size = 20;
+		if (size > 100)
+			size = 100;
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+		return userRepo.findAll(pageable);
 	}
 
 	// -------------------------- POST SU USERS --------------------------------
