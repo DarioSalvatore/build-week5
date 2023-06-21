@@ -30,18 +30,23 @@ public class Bill {
 	private Integer number;
 	@Enumerated(EnumType.STRING)
 	private StatusBill statusBill;
-	
-	
+	private static Integer lastGeneratedNumber = 0;
+
 	@ManyToOne
 	private User user;
 
-	public Bill(Integer year, LocalDate date, BigDecimal amount, Integer number, StatusBill statusBill, User user) {
+	public Bill(Integer year, LocalDate date, BigDecimal amount, StatusBill statusBill, User user) {
 		super();
 		this.year = year;
 		this.date = date;
 		this.amount = amount;
-		this.number = number;
 		this.statusBill = statusBill;
 		this.user = user;
+		this.number = generateNextNumber();
+	}
+
+	private Integer generateNextNumber() {
+		lastGeneratedNumber++; // Incrementa l'ultimo numero generato
+		return lastGeneratedNumber;
 	}
 }

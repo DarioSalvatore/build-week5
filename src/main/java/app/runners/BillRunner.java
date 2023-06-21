@@ -69,10 +69,10 @@ public class BillRunner implements CommandLineRunner {
 						LocalDate date = faker.date().birthday().toInstant().atZone(ZoneId.systemDefault())
 								.toLocalDate();
 						BigDecimal amount = new BigDecimal(faker.number().randomDouble(2, 0, 1000));
-						Integer number = random.nextInt();
+//						Integer number = random.nextInt();
 						StatusBill statusBill = faker.options().nextElement(StatusBill.values());
 
-						Bill bill = new Bill(year, date, amount, number, statusBill, user);
+						Bill bill = new Bill(year, date, amount, statusBill, user);
 						billService.create(bill);
 					}
 				} catch (Exception e) {
