@@ -2,6 +2,8 @@ package app.entities;
 
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -31,6 +33,7 @@ public class Address {
 	@Enumerated(EnumType.STRING)
 	private AddressType tipo;
 	@ManyToOne
+	@JsonBackReference
 	private User user;
 	@ManyToOne
 	private Council comune;
