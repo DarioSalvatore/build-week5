@@ -2,6 +2,7 @@ package app.runners;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -13,7 +14,6 @@ import app.entities.Address;
 import app.entities.AddressType;
 import app.entities.Council;
 import app.entities.User;
-import app.entities.UserType;
 import app.repositories.AddressesRepository;
 import app.repositories.CouncilRepository;
 import app.repositories.UserRepository;
@@ -40,8 +40,12 @@ public class AddressRunner implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		Faker faker = new Faker(new Locale("it"));
 		List<Address> list = addressesRepo.findAll();
+		List<Council> councilList = councilRepo.findAll();
+		List<User> userList = userRepo.findAll();
+		Random random = new Random();
 
 		if (list.size() == 0) {
+
 			for (int i = 0; i < 10; i++) {
 				try {
 					String via = faker.address().streetName();
@@ -49,12 +53,9 @@ public class AddressRunner implements CommandLineRunner {
 					String localita = faker.address().city();
 					int cap = faker.number().numberBetween(10000, 99999);
 					AddressType tipo = AddressType.SEDE_LEGALE;
-					User user = new User("ADA SRL", "03455411871", "ada@ada.it", 100000, "ada@pec.it", "+39098411111",
-							"ajeje@ada.it", "1234", "Ajeje", "Brazorv", "+393333333333", UserType.SRL, null, null);
-					userRepo.save(user);
-					Council comune = new Council("Sassari");
-					councilRepo.save(comune);
-					Address address = new Address(via, civico, localita, cap, tipo, user, comune);
+					User randomUser = userList.get(random.nextInt(userList.size()));
+					Council randomCouncil = councilList.get(random.nextInt(councilList.size()));
+					Address address = new Address(via, civico, localita, cap, tipo, randomUser, randomCouncil);
 					addressesRepo.save(address);
 				} catch (Exception e) {
 					System.out.println(e);
