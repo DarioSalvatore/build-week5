@@ -20,12 +20,11 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 	List<User> findByFatturatoAnnualeBetween(double minFatturato, double maxFatturato);
 
 	List<User> findBydataInserimento(LocalDate dataInserimento);
-	
+
 	List<User> findBydataUltimoContatto(LocalDate dataUltimoContatto);
-	
+
 	@Query("SELECT u FROM User u WHERE lower(u.nomeContatto) LIKE lower(concat('%', :nomeContatto, '%')) "
 			+ "OR lower(u.nomeContatto) LIKE lower(concat('%', initcap(:nomeContatto), '%'))")
 	List<User> findBynomeContattoIgnoreCase(String nomeContatto);
-	
-	
+
 }

@@ -22,6 +22,7 @@ import app.entities.Bill;
 import app.entities.StatusBill;
 import app.exceptions.NotFoundException;
 import app.services.BillService;
+import app.services.UserService;
 
 @RestController
 @RequestMapping("/bills")
@@ -29,6 +30,9 @@ public class BillController {
 
 	@Autowired
 	BillService billService;
+
+	@Autowired
+	UserService userService;
 
 	// get all bills and order by name
 	// OK
@@ -64,10 +68,10 @@ public class BillController {
 		billService.findByIdAndDelete(billId);
 	}
 
-	// Non mettere paginazione
+	// OK
 	@GetMapping("/user")
-	public List<Bill> getBillsByUser(@RequestParam("user") UUID userId) {
-		return billService.getBillsByUser(userId);
+	public List<Bill> getBillsByUserId(@RequestParam("user") UUID userId) {
+		return billService.getBillsByUserId(userId);
 	}
 
 	// OK Aggiungere Paginazione
