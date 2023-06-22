@@ -64,30 +64,31 @@ public class BillController {
 		billService.findByIdAndDelete(billId);
 	}
 
+	// Non mettere paginazione
 	@GetMapping("/user")
 	public List<Bill> getBillsByUser(@RequestParam("user") UUID userId) {
 		return billService.getBillsByUser(userId);
 	}
 
-	// OK
+	// OK Aggiungere Paginazione
 	@GetMapping("/status")
 	public List<Bill> getBillsByStatusBill(@RequestParam("status") StatusBill status) {
 		return billService.getBillsByStatusBill(status);
 	}
 
-	// OK
+	// OK Aggiungere Paginazione
 	@GetMapping("/date")
 	public List<Bill> getBillsByDate(@RequestParam("date") String date) {
 		return billService.getBillsByDate(LocalDate.parse(date));
 	}
 
-	// OK
+	// OK Aggiungere Paginazione
 	@GetMapping("/year")
 	public List<Bill> getBillsByYear(@RequestParam("year") int year) {
 		return billService.getBillsByYear(year);
 	}
 
-	// OK
+	// OK Aggiungere Paginazione
 	@GetMapping("/rangeofamounts")
 	public List<Bill> getBillsByAmount(@RequestParam("min") double min, @RequestParam("max") double max) {
 		return billService.getBillsByAmount(min, max);
