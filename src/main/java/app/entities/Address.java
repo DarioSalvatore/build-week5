@@ -3,6 +3,7 @@ package app.entities;
 import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -22,6 +23,7 @@ import lombok.ToString;
 @ToString
 @Entity
 @Table(name = "addresses")
+@JsonIgnoreProperties
 public class Address {
 	@Id
 	@GeneratedValue
