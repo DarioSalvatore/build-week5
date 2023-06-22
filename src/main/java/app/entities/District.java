@@ -3,6 +3,7 @@ package app.entities;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
@@ -20,6 +21,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
+@JsonIgnoreProperties({ "comuni" })
 public class District {
 	@Id
 	@GeneratedValue
