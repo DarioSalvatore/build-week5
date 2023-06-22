@@ -17,7 +17,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 	// metodo create del service
 	Optional<User> findByEmail(String email);
 
-	List<User> findByFatturatoAnnualeGreaterThanEqual(double fatturatoAnnuale);
+	List<User> findByFatturatoAnnualeBetween(double minFatturato, double maxFatturato);
 
 	List<User> findBydataInserimento(LocalDate dataInserimento);
 	

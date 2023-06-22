@@ -35,11 +35,12 @@ public class UserController {
 	@Autowired
 	private UserRepository userRepo;
 
-	// FatturatoAnnuale maggiore di n : (GET:
-	// http://localhost:3001/users/filter?fatturato=180)
+	// FatturatoAnnuale dato un range : (GET:
+	// http://localhost:3001/users/filter?minFatturato=150&maxFatturato=180
 	@GetMapping("/filter")
-	public List<User> findByFatturatoAnnuale(@RequestParam("fatturato") double fatturatoAnnuale) {
-		return userService.getUserByFatturatoAnnuale(fatturatoAnnuale);
+	public List<User> findByFatturatoAnnualeRange(@RequestParam("minFatturato") double minFatturato,
+            @RequestParam("maxFatturato") double maxFatturato) {
+		return userService.findByFatturatoAnnualeRange(minFatturato, maxFatturato);
 	}
 
 	// filtra per data (GET: http://localhost:3001/users/date?startDate=1962-11-30)
