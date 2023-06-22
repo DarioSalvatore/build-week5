@@ -38,9 +38,11 @@ public class UserController {
 	// FatturatoAnnuale dato un range : (GET:
 	// http://localhost:3001/users/filter?minFatturato=150&maxFatturato=180
 	@GetMapping("/filter")
-	public List<User> findByFatturatoAnnualeRange(@RequestParam("minFatturato") double minFatturato,
-            @RequestParam("maxFatturato") double maxFatturato) {
-		return userService.findByFatturatoAnnualeRange(minFatturato, maxFatturato);
+	public Page<User> findByFatturatoAnnualeRange(@RequestParam("minFatturato") double minFatturato,
+			@RequestParam("maxFatturato") double maxFatturato, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size,
+			@RequestParam(defaultValue = "fatturatoAnnuale") String sortBy) {
+		return userService.findByFatturatoAnnualeRange(minFatturato, maxFatturato, page, size, sortBy);
 	}
 
 	// filtra per data (GET: http://localhost:3001/users/date?startDate=1962-11-30)
