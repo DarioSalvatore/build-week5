@@ -61,7 +61,7 @@ public class UserController {
 	public Page<User> findByDate(
 			@RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataInserimento,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
-			@RequestParam(defaultValue = "number") String sortBy) {
+			@RequestParam(defaultValue = "dataInserimento") String sortBy) {
 		return userService.findBydataInserimento(dataInserimento, page, size, sortBy);
 	}
 
@@ -71,7 +71,7 @@ public class UserController {
 	public Page<User> findBydataUltimoContatto(
 			@RequestParam("dataUltimoContatto") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataUltimoContatto,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
-			@RequestParam(defaultValue = "number") String sortBy) {
+			@RequestParam(defaultValue = "dataUltimoContatto") String sortBy) {
 		return userService.findBydataUltimoContatto(dataUltimoContatto, page, size, sortBy);
 	}
 
@@ -79,7 +79,7 @@ public class UserController {
 	// http://localhost:3001/users/name?name=elsa
 	@GetMapping("/name")
 	public Page<User> findByName(@RequestParam("name") String name, @RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "number") String sortBy) {
+			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "nomeContatto") String sortBy) {
 		return userService.findBynomeContattoIgnoreCase(name, page, size, sortBy);
 	}
 
