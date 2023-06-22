@@ -30,7 +30,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-@JsonIgnoreProperties({ "fatturatoAnnuale", "password", "fatture", "telefonoContatto" })
+@JsonIgnoreProperties({ "fatturatoAnnuale", "password", "fatture", "telefonoContatto", "username", "enabled",
+		"accountNonExpired", "accountNonLocked", "credentialsNonExpired", "authorities" })
 public class User implements UserDetails {
 	@Id
 	@GeneratedValue
