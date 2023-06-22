@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -22,7 +21,9 @@ public interface BillRepository extends JpaRepository<Bill, UUID> {
 
 	List<Bill> findByStatusBill(StatusBill status);
 
-	@Query(nativeQuery = true, value = "SELECT * FROM bills JOIN users ON user.id = bills.user_id WHERE users.id = :id")
-	List<Bill> findByUser(@Param("id") UUID id);
+	List<Bill> findByUser(UUID userId);
+
+//	@Query(nativeQuery = true, value = "SELECT * FROM bills JOIN users ON user.id = bills.user_id WHERE users.id = :id")
+//	List<Bill> findByUser(@Param("id") UUID id);
 
 }

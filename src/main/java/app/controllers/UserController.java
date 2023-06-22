@@ -35,14 +35,6 @@ public class UserController {
 	@Autowired
 	private UserRepository userRepo;
 
-	// -------------------------- GET SU USERS -----------------------------
-	// Versione 1 (GET: http://localhost:3001/users) OK
-	@GetMapping("")
-	public Page<User> getAllUsers(@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "ragioneSociale") String sortBy) {
-		return userService.find(page, size, sortBy);
-	}
-
 	// FatturatoAnnuale maggiore di n : (GET:
 	// http://localhost:3001/users/filter?fatturato=180)
 	@GetMapping("/filter")
@@ -70,6 +62,14 @@ public class UserController {
 	@GetMapping("/name")
 	public List<User> findByName(@RequestParam("name") String name) {
 		return userRepo.findBynomeContattoIgnoreCase(name);
+	}
+
+	// -------------------------- GET SU USERS -----------------------------
+	// Versione 1 (GET: http://localhost:3001/users) OK
+	@GetMapping("")
+	public Page<User> getAllUsers(@RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "ragioneSociale") String sortBy) {
+		return userService.find(page, size, sortBy);
 	}
 
 	// -------------------------- POST SU USERS --------------------------------

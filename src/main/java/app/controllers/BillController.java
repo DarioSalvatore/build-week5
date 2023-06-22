@@ -75,17 +75,20 @@ public class BillController {
 		return billService.getBillsByStatusBill(status);
 	}
 
-	@GetMapping("bills/date")
+	// OK
+	@GetMapping("/date")
 	public List<Bill> getBillsByDate(@RequestParam("date") String date) {
 		return billService.getBillsByDate(LocalDate.parse(date));
 	}
 
-	@GetMapping("bills/year")
+	// OK
+	@GetMapping("/year")
 	public List<Bill> getBillsByYear(@RequestParam("year") int year) {
 		return billService.getBillsByYear(year);
 	}
 
-	@GetMapping("bills/amount")
+	// OK
+	@GetMapping("/rangeofamounts")
 	public List<Bill> getBillsByAmount(@RequestParam("min") double min, @RequestParam("max") double max) {
 		return billService.getBillsByAmount(min, max);
 	}
