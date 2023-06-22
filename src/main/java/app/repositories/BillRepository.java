@@ -22,7 +22,7 @@ public interface BillRepository extends JpaRepository<Bill, UUID> {
 
 	List<Bill> findByStatusBill(StatusBill status);
 
-	@Query(nativeQuery = true, value = "SELECT * FROM bills JOIN users ON user.id = bills.user_id WHERE users.id = :id")
-	List<Bill> findByUser(@Param("id") UUID id);
+	@Query("SELECT b FROM Bill b WHERE b.user.id = :userId")
+	List<Bill> findBillsByUserId(@Param("userId") UUID userId);
 
 }

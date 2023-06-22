@@ -15,11 +15,15 @@ import app.entities.Bill;
 import app.entities.StatusBill;
 import app.exceptions.NotFoundException;
 import app.repositories.BillRepository;
+import app.repositories.UserRepository;
 
 @Service
 public class BillService {
 	@Autowired
 	private BillRepository billRepo;
+
+	@Autowired
+	private UserRepository userRepo;
 
 	// 1. create Bill
 	public Bill create(Bill u) {
@@ -66,8 +70,8 @@ public class BillService {
 		return billRepo.count();
 	}
 
-	public List<Bill> getBillsByUser(UUID id) {
-		return billRepo.findByUser(id);
+	public List<Bill> getBillsByUserId(UUID userId) {
+		return billRepo.findBillsByUserId(userId);
 	}
 
 	public List<Bill> getBillsByStatusBill(StatusBill status) {
