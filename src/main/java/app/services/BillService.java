@@ -18,6 +18,7 @@ import app.repositories.BillRepository;
 
 @Service
 public class BillService {
+
 	@Autowired
 	private BillRepository billRepo;
 
@@ -70,19 +71,39 @@ public class BillService {
 		return billRepo.findByUser(id);
 	}
 
-	public List<Bill> getBillsByStatusBill(StatusBill status) {
-		return billRepo.findByStatusBill(status);
+	public Page<Bill> getBillsByStatusBill(StatusBill status, int page, int size, String sortBy) {
+		if (size < 0)
+			size = 20;
+		if (size > 100)
+			size = 100;
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+		return billRepo.findByStatusBill(status, pageable);
 	}
 
-	public List<Bill> getBillsByDate(LocalDate date) {
-		return billRepo.findByDate(date);
+	public Page<Bill> getBillsByDate(LocalDate date, int page, int size, String sortBy) {
+		if (size < 0)
+			size = 20;
+		if (size > 100)
+			size = 100;
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+		return billRepo.findByDate(date, pageable);
 	}
 
-	public List<Bill> getBillsByYear(int year) {
-		return billRepo.findByYear(year);
+	public Page<Bill> getBillsByYear(int year, int page, int size, String sortBy) {
+		if (size < 0)
+			size = 20;
+		if (size > 100)
+			size = 100;
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+		return billRepo.findByYear(year, pageable);
 	}
 
-	public List<Bill> getBillsByAmount(double min, double max) {
-		return billRepo.findByAmountBetween(min, max);
+	public Page<Bill> getBillsByAmount(double min, double max, int page, int size, String sortBy) {
+		if (size < 0)
+			size = 20;
+		if (size > 100)
+			size = 100;
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+		return billRepo.findByAmountBetween(min, max, pageable);
 	}
 }

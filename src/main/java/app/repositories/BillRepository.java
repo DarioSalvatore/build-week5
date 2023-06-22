@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,13 +16,13 @@ import app.entities.StatusBill;
 
 @Repository
 public interface BillRepository extends JpaRepository<Bill, UUID> {
-	List<Bill> findByYear(int year);
+	Page<Bill> findByYear(int year, Pageable pageable);
 
-	List<Bill> findByDate(LocalDate date);
+	Page<Bill> findByDate(LocalDate date, Pageable pageable);
 
-	List<Bill> findByAmountBetween(@Param("min") double min, @Param("max") double max);
+	Page<Bill> findByAmountBetween(@Param("min") double min, @Param("max") double max, Pageable pageable);
 
-	List<Bill> findByStatusBill(StatusBill status);
+	Page<Bill> findByStatusBill(StatusBill status, Pageable pageable);
 
 	@Query(nativeQuery = true, value = "SELECT * FROM bills JOIN users ON user.id = bills.user_id WHERE users.id = :id")
 	List<Bill> findByUser(@Param("id") UUID id);
