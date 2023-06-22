@@ -1,7 +1,6 @@
 package app.controllers;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,34 +67,41 @@ public class BillController {
 		billService.findByIdAndDelete(billId);
 	}
 
-	// OK
-	@GetMapping("/user")
-	public List<Bill> getBillsByUserId(@RequestParam("user") UUID userId) {
-		return billService.getBillsByUserId(userId);
-	}
+	// Non mettere paginazione
+//	@GetMapping("/user")
+//	public List<Bill> getBillsByUser(@RequestParam("user") UUID userId) {
+//		return billService.getBillsByUser(userId);
+//	}
 
 	// OK Aggiungere Paginazione
 	@GetMapping("/status")
-	public List<Bill> getBillsByStatusBill(@RequestParam("status") StatusBill status) {
-		return billService.getBillsByStatusBill(status);
+	public Page<Bill> getBillsByStatusBill(@RequestParam("status") StatusBill status,
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
+			@RequestParam(defaultValue = "number") String sortBy) {
+		return billService.getBillsByStatusBill(status, page, size, sortBy);
 	}
 
 	// OK Aggiungere Paginazione
 	@GetMapping("/date")
-	public List<Bill> getBillsByDate(@RequestParam("date") String date) {
-		return billService.getBillsByDate(LocalDate.parse(date));
+	public Page<Bill> getBillsByDate(@RequestParam("date") String date, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "number") String sortBy) {
+		LocalDate parsedDate = LocalDate.parse(date);
+		return billService.getBillsByDate(parsedDate, page, size, sortBy);
 	}
 
 	// OK Aggiungere Paginazione
 	@GetMapping("/year")
-	public List<Bill> getBillsByYear(@RequestParam("year") int year) {
-		return billService.getBillsByYear(year);
+	public Page<Bill> getBillsByYear(@RequestParam("year") int year, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "number") String sortBy) {
+		return billService.getBillsByYear(year, page, size, sortBy);
 	}
 
 	// OK Aggiungere Paginazione
 	@GetMapping("/rangeofamounts")
-	public List<Bill> getBillsByAmount(@RequestParam("min") double min, @RequestParam("max") double max) {
-		return billService.getBillsByAmount(min, max);
+	public Page<Bill> getBillsByAmount(@RequestParam("min") double min, @RequestParam("max") double max,
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
+			@RequestParam(defaultValue = "number") String sortBy) {
+		return billService.getBillsByAmount(min, max, page, size, sortBy);
 	}
 
 }

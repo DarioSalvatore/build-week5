@@ -1,7 +1,6 @@
 package app.repositories;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -21,12 +20,12 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
 	Page<User> findByFatturatoAnnualeBetween(double minFatturato, double maxFatturato, Pageable pageable);
 
-	List<User> findBydataInserimento(LocalDate dataInserimento);
+	Page<User> findBydataInserimento(LocalDate dataInserimento, Pageable pageable);
 
-	List<User> findBydataUltimoContatto(LocalDate dataUltimoContatto);
+	Page<User> findBydataUltimoContatto(LocalDate dataUltimoContatto, Pageable pageable);
 
 	@Query("SELECT u FROM User u WHERE lower(u.nomeContatto) LIKE lower(concat('%', :nomeContatto, '%')) "
 			+ "OR lower(u.nomeContatto) LIKE lower(concat('%', initcap(:nomeContatto), '%'))")
-	List<User> findBynomeContattoIgnoreCase(String nomeContatto);
+	Page<User> findBynomeContattoIgnoreCase(String nomeContatto, Pageable pageable);
 
 }
