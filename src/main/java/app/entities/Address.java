@@ -36,6 +36,7 @@ public class Address {
 	@JsonBackReference
 	private User user;
 	@ManyToOne
+	@JsonBackReference
 	private Council comune;
 
 	public Address(String via, String civico, String località, int cap, AddressType tipo, User user, Council comune) {
