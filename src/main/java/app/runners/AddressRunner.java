@@ -45,16 +45,21 @@ public class AddressRunner implements CommandLineRunner {
 		Random random = new Random();
 
 		if (list.size() == 0) {
-
 			for (int i = 0; i < 10; i++) {
 				try {
 					String via = faker.address().streetName();
 					String civico = faker.address().buildingNumber();
 					String localita = faker.address().city();
 					int cap = faker.number().numberBetween(10000, 99999);
-					AddressType tipo = AddressType.SEDE_LEGALE;
 					User randomUser = userList.get(random.nextInt(userList.size()));
 					Council randomCouncil = councilList.get(random.nextInt(councilList.size()));
+					boolean hasLegalAddress = addressesRepo.existsByUserAndTipo(randomUser, AddressType.SEDE_LEGALE);
+					AddressType tipo;
+					if (hasLegalAddress) {
+						tipo = AddressType.SEDE_OPERATIVA;
+					} else {
+						tipo = AddressType.SEDE_LEGALE;
+					}
 					Address address = new Address(via, civico, localita, cap, tipo, randomUser, randomCouncil);
 					addressesRepo.save(address);
 				} catch (Exception e) {

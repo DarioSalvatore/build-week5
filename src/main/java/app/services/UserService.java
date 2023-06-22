@@ -3,6 +3,7 @@ package app.services;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +15,14 @@ import org.springframework.stereotype.Service;
 
 import app.entities.Address;
 import app.entities.Bill;
+import app.entities.Council;
+import app.entities.District;
 import app.entities.User;
 import app.exceptions.BadRequestException;
 import app.exceptions.NotFoundException;
 import app.payloads.UserPayload;
 import app.repositories.BillRepository;
+import app.repositories.DistrictRepository;
 import app.repositories.UserRepository;
 
 @Service
@@ -29,6 +33,9 @@ public class UserService {
 
 	@Autowired
 	private BillRepository billRepository;
+
+	@Autowired
+	private DistrictRepository districtRepo;
 
 	// -------------------------- GET SU USERS -----------------------------
 	// Versione 1 (GET: http://localhost:3001/users) OK
@@ -140,5 +147,21 @@ public class UserService {
 			size = 100;
 		Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
 		return userRepo.findBynomeContattoIgnoreCase(name, pageable);
+	}
+
+	public Page<User> findByProvincia(String provincia, Pageable pageable) {
+		Optional<District> districtOptional = districtRepo.findByProvincia(provincia);
+		if (districtOptional.isPresent()) {
+			return userRepo.findByProvincia(districtOptional.get(), pageable);
+		}
+		throw new IllegalArgumentException("Provincia non valida: " + provincia);
+	}
+
+	public District getProvinciaByRagioneSociale(String ragioneSociale) {
+		return userRepo.findProvinciaByRagioneSociale(ragioneSociale);
+	}
+
+	public Council getComuneByRagioneSociale(String ragioneSociale) {
+		return userRepo.findComuneByRagioneSociale(ragioneSociale);
 	}
 }

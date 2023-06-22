@@ -1,6 +1,8 @@
 package app.controllers;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,8 +26,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import app.entities.Bill;
+import app.entities.Council;
+import app.entities.District;
 import app.entities.User;
 import app.payloads.UserPayload;
+import app.repositories.DistrictRepository;
 import app.repositories.UserRepository;
 import app.services.UserService;
 
@@ -36,6 +42,9 @@ public class UserController {
 
 	@Autowired
 	private UserRepository userRepo;
+
+	@Autowired
+	private DistrictRepository districtRepo;
 
 	// FatturatoAnnuale dato un range : (GET:
 	// http://localhost:3001/users/filter?minFatturato=150&maxFatturato=180
@@ -122,4 +131,26 @@ public class UserController {
 		userService.findByIdAndDelete(idUser);
 	}
 
+	@GetMapping("/district")
+	public Page<User> findByProvincia(@RequestParam("provincia") String provincia,
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+		Pageable pageable = PageRequest.of(page, size);
+		return userService.findByProvincia(provincia, pageable);
+	}
+
+	@GetMapping("/{ragioneSociale}/sede_legale")
+	public ResponseEntity<Map<String, String>> getSedeLegaleByRagioneSociale(
+			@PathVariable("ragioneSociale") String ragioneSociale) {
+		Council comune = userService.getComuneByRagioneSociale(ragioneSociale);
+		District provincia = userService.getProvinciaByRagioneSociale(ragioneSociale);
+
+		if (comune != null && provincia != null) {
+			Map<String, String> sedeLegale = new HashMap<>();
+			sedeLegale.put("comune", comune.getDenominazione());
+			sedeLegale.put("provincia", provincia.getProvincia());
+			return ResponseEntity.ok(sedeLegale);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
 }

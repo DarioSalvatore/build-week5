@@ -8,8 +8,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import app.entities.Council;
+import app.entities.District;
 import app.entities.User;
 
 @Repository
@@ -28,4 +31,12 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 			+ "OR lower(u.nomeContatto) LIKE lower(concat('%', initcap(:nomeContatto), '%'))")
 	Page<User> findBynomeContattoIgnoreCase(String nomeContatto, Pageable pageable);
 
+	@Query("SELECT u FROM User u JOIN u.indirizzi a WHERE a.comune.provincia = :provincia")
+	Page<User> findByProvincia(@Param("provincia") District provincia, Pageable pageable);
+
+	@Query("SELECT a.comune FROM User u JOIN u.indirizzi a WHERE u.ragioneSociale = :ragioneSociale AND a.tipo = 'SEDE_LEGALE'")
+	Council findComuneByRagioneSociale(@Param("ragioneSociale") String ragioneSociale);
+
+	@Query("SELECT a.comune.provincia FROM User u JOIN u.indirizzi a WHERE u.ragioneSociale = :ragioneSociale AND a.tipo = 'SEDE_LEGALE'")
+	District findProvinciaByRagioneSociale(@Param("ragioneSociale") String ragioneSociale);
 }
