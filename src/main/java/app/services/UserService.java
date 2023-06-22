@@ -104,8 +104,10 @@ public class UserService {
 
 		return found.getFatture();
 	}
-	
-	public List<User> findByFatturatoAnnualeRange(double minFatturato, double maxFatturato) {
-        return userRepo.findByFatturatoAnnualeBetween(minFatturato, maxFatturato);
-    }
+
+	public Page<User> findByFatturatoAnnualeRange(double minFatturato, double maxFatturato, int page, int size,
+			String sortBy) {
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+		return userRepo.findByFatturatoAnnualeBetween(minFatturato, maxFatturato, pageable);
+	}
 }
