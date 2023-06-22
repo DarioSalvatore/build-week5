@@ -1,11 +1,13 @@
 package app.controllers;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -47,24 +49,29 @@ public class UserController {
 
 	// filtra per data (GET: http://localhost:3001/users/date?startDate=1962-11-30)
 	@GetMapping("/date")
-	public List<User> findByDate(
-			@RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataInserimento) {
-		return userRepo.findBydataInserimento(dataInserimento);
+	public Page<User> findByDate(
+			@RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataInserimento,
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
+			@RequestParam(defaultValue = "number") String sortBy) {
+		return userService.findBydataInserimento(dataInserimento, page, size, sortBy);
 	}
 
 	// filtra per dataUltimoContatto
 	// http://localhost:3001/users/dateLastContact?dataUltimoContatto=2000-09-01
 	@GetMapping("/dateLastContact")
-	public List<User> findBydataUltimoContatto(
-			@RequestParam("dataUltimoContatto") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataUltimoContatto) {
-		return userRepo.findBydataUltimoContatto(dataUltimoContatto);
+	public Page<User> findBydataUltimoContatto(
+			@RequestParam("dataUltimoContatto") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataUltimoContatto,
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
+			@RequestParam(defaultValue = "number") String sortBy) {
+		return userService.findBydataUltimoContatto(dataUltimoContatto, page, size, sortBy);
 	}
 
 	// filtra per nome sia camel case che lower case
 	// http://localhost:3001/users/name?name=elsa
 	@GetMapping("/name")
-	public List<User> findByName(@RequestParam("name") String name) {
-		return userRepo.findBynomeContattoIgnoreCase(name);
+	public Page<User> findByName(@RequestParam("name") String name, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "number") String sortBy) {
+		return userService.findBynomeContattoIgnoreCase(name, page, size, sortBy);
 	}
 
 	// -------------------------- GET SU USERS -----------------------------
@@ -92,9 +99,12 @@ public class UserController {
 
 	// ------------ GET PER OTTENERE LE FATTURE DEL SINGOLO USER -------------
 	// Versione 1 (GET: http://localhost:3001/users/{idUser}/dispositivi) OK
+
 	@GetMapping("/{idUser}/bills")
-	public List<Bill> findBillsUser(@PathVariable UUID idUser) {
-		return userService.findBillsUser(idUser);
+	public Page<Bill> findBillsUser(@PathVariable UUID idUser, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "number") String sortBy) {
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+		return userService.findBillsUser(idUser, pageable);
 	}
 
 	// ----------------------- PUT SU SINGOLO USER -----------------------------

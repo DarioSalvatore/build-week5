@@ -1,7 +1,6 @@
 package app.controllers;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,10 +64,10 @@ public class BillController {
 	}
 
 	// Non mettere paginazione
-	@GetMapping("/user")
-	public List<Bill> getBillsByUser(@RequestParam("user") UUID userId) {
-		return billService.getBillsByUser(userId);
-	}
+//	@GetMapping("/user")
+//	public List<Bill> getBillsByUser(@RequestParam("user") UUID userId) {
+//		return billService.getBillsByUser(userId);
+//	}
 
 	// OK Aggiungere Paginazione
 	@GetMapping("/status")

@@ -1,5 +1,6 @@
 package app.services;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -17,6 +18,7 @@ import app.entities.User;
 import app.exceptions.BadRequestException;
 import app.exceptions.NotFoundException;
 import app.payloads.UserPayload;
+import app.repositories.BillRepository;
 import app.repositories.UserRepository;
 
 @Service
@@ -24,6 +26,9 @@ public class UserService {
 
 	@Autowired
 	private UserRepository userRepo;
+
+	@Autowired
+	private BillRepository billRepository;
 
 	// -------------------------- GET SU USERS -----------------------------
 	// Versione 1 (GET: http://localhost:3001/users) OK
@@ -99,15 +104,41 @@ public class UserService {
 				() -> new NotFoundException("ATTENZIONE!!! L'email che stai cercando non è stata trovata"));
 	}
 
-	public List<Bill> findBillsUser(UUID id) {
+	public Page<Bill> findBillsUser(UUID id, Pageable pageable) {
 		User found = this.findById(id);
-
-		return found.getFatture();
+		return billRepository.findByUser(found, pageable);
 	}
 
 	public Page<User> findByFatturatoAnnualeRange(double minFatturato, double maxFatturato, int page, int size,
 			String sortBy) {
 		Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
 		return userRepo.findByFatturatoAnnualeBetween(minFatturato, maxFatturato, pageable);
+	}
+
+	public Page<User> findBydataInserimento(LocalDate dataInserimento, int page, int size, String sortBy) {
+		if (size < 0)
+			size = 20;
+		if (size > 100)
+			size = 100;
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+		return userRepo.findBydataInserimento(dataInserimento, pageable);
+	}
+
+	public Page<User> findBydataUltimoContatto(LocalDate dataUltimoContatto, int page, int size, String sortBy) {
+		if (size < 0)
+			size = 20;
+		if (size > 100)
+			size = 100;
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+		return userRepo.findBydataUltimoContatto(dataUltimoContatto, pageable);
+	}
+
+	public Page<User> findBynomeContattoIgnoreCase(String name, int page, int size, String sortBy) {
+		if (size < 0)
+			size = 20;
+		if (size > 100)
+			size = 100;
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+		return userRepo.findBynomeContattoIgnoreCase(name, pageable);
 	}
 }

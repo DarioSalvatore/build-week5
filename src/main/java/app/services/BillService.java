@@ -1,7 +1,6 @@
 package app.services;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,9 +66,9 @@ public class BillService {
 		return billRepo.count();
 	}
 
-	public List<Bill> getBillsByUser(UUID id) {
-		return billRepo.findByUser(id);
-	}
+//	public List<Bill> getBillsByUser(UUID id) {
+//		return billRepo.findByUser(id);
+//	}
 
 	public Page<Bill> getBillsByStatusBill(StatusBill status, int page, int size, String sortBy) {
 		if (size < 0)
