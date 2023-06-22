@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -14,12 +12,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "bills")
-@Data
+@Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Bill {
@@ -32,10 +32,11 @@ public class Bill {
 	private Integer number;
 	@Enumerated(EnumType.STRING)
 	private StatusBill statusBill;
+
 	private static Integer lastGeneratedNumber = 0;
 
 	@ManyToOne
-	@JsonBackReference
+//	@JsonBackReference
 	private User user;
 
 	public Bill(Integer year, LocalDate date, BigDecimal amount, StatusBill statusBill, User user) {
@@ -43,13 +44,22 @@ public class Bill {
 		this.year = year;
 		this.date = date;
 		this.amount = amount;
+		this.number = generateNextNumber();
 		this.statusBill = statusBill;
 		this.user = user;
+	}
+
+	public Bill(Integer year, LocalDate date, BigDecimal amount, StatusBill statusBill) {
+		super();
+		this.year = year;
+		this.date = date;
+		this.amount = amount;
 		this.number = generateNextNumber();
+		this.statusBill = statusBill;
 	}
 
 	private Integer generateNextNumber() {
-		lastGeneratedNumber++; // Incrementa l'ultimo numero generato
+		lastGeneratedNumber++;
 		return lastGeneratedNumber;
 	}
 }

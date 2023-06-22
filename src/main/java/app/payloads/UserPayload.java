@@ -34,5 +34,4 @@ public class UserPayload {
 	private String telefonoContatto;
 	@NotNull(message = "ATTENZIONE!!! Il campo Tipo è obbligatorio")
 	private UserType tipo;
-
 }

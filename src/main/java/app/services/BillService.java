@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import app.entities.Bill;
 import app.entities.StatusBill;
 import app.exceptions.NotFoundException;
+import app.payloads.BillPayload;
 import app.repositories.BillRepository;
 import app.repositories.UserRepository;
 
@@ -25,9 +26,14 @@ public class BillService {
 	@Autowired
 	private UserRepository userRepo;
 
-	// 1. create Bill
 	public Bill create(Bill u) {
 		return billRepo.save(u);
+	}
+
+	// 1. create Bill
+	public Bill create2(BillPayload u) {
+		Bill newBill = new Bill(u.getYear(), u.getDate(), u.getAmount(), u.getStatusBill());
+		return billRepo.save(newBill);
 	}
 
 	// 2. search all Bills

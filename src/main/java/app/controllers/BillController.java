@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import app.entities.Bill;
 import app.entities.StatusBill;
 import app.exceptions.NotFoundException;
+import app.payloads.BillPayload;
 import app.services.BillService;
 import app.services.UserService;
 
@@ -42,10 +44,17 @@ public class BillController {
 	}
 
 	// OK
+//	@PostMapping("")
+//	@ResponseStatus(HttpStatus.CREATED)
+//	public Bill saveBill(@RequestBody Bill body) {
+//		return billService.create(body);
+//	}
+
+	// TEST
 	@PostMapping("")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Bill saveBill(@RequestBody Bill body) {
-		return billService.create(body);
+	public Bill saveBill(@RequestBody @Validated BillPayload body) {
+		return billService.create2(body);
 	}
 
 	// Ok

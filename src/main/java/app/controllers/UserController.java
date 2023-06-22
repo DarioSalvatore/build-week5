@@ -118,9 +118,16 @@ public class UserController {
 
 	// ----------------------- PUT SU SINGOLO USER -----------------------------
 	// Versione 1 (PUT: http://localhost:3001/users/{idUser}) OK
+//	@PutMapping("/{idUser}")
+//	public User updateUser(@PathVariable UUID idUser, @RequestBody User body) throws Exception {
+//		return userService.findByIdAndUpdate(idUser, body);
+//	}
+
+	// TEST
 	@PutMapping("/{idUser}")
-	public User updateUser(@PathVariable UUID idUser, @RequestBody User body) throws Exception {
-		return userService.findByIdAndUpdate(idUser, body);
+	public ResponseEntity<User> register(@PathVariable UUID idUser, @RequestBody @Validated UserPayload body) {
+		User createdUser = userService.findByIdAndUpdate(idUser, body);
+		return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
 	}
 
 	// -------------------- DELETE SU SINGOLO USER -----------------------------

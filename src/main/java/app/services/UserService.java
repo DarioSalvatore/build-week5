@@ -76,15 +76,37 @@ public class UserService {
 
 	// ----------------------- PUT SU SINGOLO USER -----------------------------
 	// Versione 1 (PUT: http://localhost:3001/users/{idUser}) OK
-	public User findByIdAndUpdate(UUID id, User u) throws NotFoundException {
+//	public User findByIdAndUpdate(UUID id, User u) throws NotFoundException {
+//		User found = this.findById(id);
+//
+//		found.setId(id);
+//		found.setRagioneSociale(u.getRagioneSociale());
+//		found.setPartitaIva(u.getPartitaIva());
+//		found.setEmail(u.getEmail());
+//		found.setDataInserimento(u.getDataInserimento());
+//		found.setDataUltimoContatto(u.getDataUltimoContatto());
+//		found.setFatturatoAnnuale(u.getFatturatoAnnuale());
+//		found.setPec(u.getPec());
+//		found.setTelefono(u.getTelefono());
+//		found.setMailContatto(u.getMailContatto());
+//		found.setPassword(u.getPassword());
+//		found.setNomeContatto(u.getNomeContatto());
+//		found.setCognomeContatto(u.getCognomeContatto());
+//		found.setTelefono(u.getTelefono());
+//		found.setTipo(u.getTipo());
+//
+//		return userRepo.save(found);
+//	}
+
+	public User findByIdAndUpdate(UUID id, UserPayload u) throws NotFoundException {
 		User found = this.findById(id);
 
 		found.setId(id);
 		found.setRagioneSociale(u.getRagioneSociale());
 		found.setPartitaIva(u.getPartitaIva());
 		found.setEmail(u.getEmail());
-		found.setDataInserimento(u.getDataInserimento());
-		found.setDataUltimoContatto(u.getDataUltimoContatto());
+//		found.setDataInserimento(u.getDataInserimento());
+//		found.setDataUltimoContatto(u.getDataUltimoContatto());
 		found.setFatturatoAnnuale(u.getFatturatoAnnuale());
 		found.setPec(u.getPec());
 		found.setTelefono(u.getTelefono());
