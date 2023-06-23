@@ -26,11 +26,12 @@ public class SecurityConfig {
 
 		http.csrf(c -> c.disable());
 
-		http.authorizeHttpRequests(
-				auth -> auth.requestMatchers("/auth/**").permitAll().requestMatchers(HttpMethod.GET, "/users/**")
-						.hasAnyAuthority("USER", "ADMIN").requestMatchers("/users/**").hasAuthority("ADMIN")
-						.requestMatchers(HttpMethod.GET, "/bills/**").hasAnyAuthority("USER", "ADMIN")
-						.requestMatchers("/bills/**").hasAuthority("ADMIN").anyRequest().authenticated());
+		http.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/register", "/auth/login").permitAll()
+				.requestMatchers("/auth/register/admin").hasAuthority("app.auth.ADMIN")
+				.requestMatchers(HttpMethod.GET, "/users/**").hasAnyAuthority("USER", "ADMIN")
+				.requestMatchers("/users/**").hasAuthority("ADMIN").requestMatchers(HttpMethod.GET, "/bills/**")
+				.hasAnyAuthority("USER", "ADMIN").requestMatchers("/bills/**").hasAuthority("ADMIN").anyRequest()
+				.authenticated());
 
 		http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 		http.addFilterBefore(corsFilter, JWTAuthFilter.class);

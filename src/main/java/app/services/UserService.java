@@ -20,6 +20,7 @@ import app.entities.District;
 import app.entities.User;
 import app.exceptions.BadRequestException;
 import app.exceptions.NotFoundException;
+import app.payloads.AdminPayload;
 import app.payloads.UserPayload;
 import app.repositories.BillRepository;
 import app.repositories.DistrictRepository;
@@ -65,6 +66,15 @@ public class UserService {
 				u.getPec(), u.getTelefono(), u.getMailContatto(), u.getPassword(), u.getNomeContatto(),
 				u.getCognomeContatto(), u.getTelefonoContatto(), u.getTipo(), indirizzi, fatture);
 		return userRepo.save(newUser);
+	}
+
+	public User createAdmin(AdminPayload u) {
+		userRepo.findByEmail(u.getEmail()).ifPresent(user -> {
+			throw new BadRequestException(
+					"ATTENZIONE!!! L'email con la quale stai cercando di registarti è già in uso da un altro user");
+		});
+		User newAdmin = new User(u.getEmail(), u.getPassword(), u.getNomeContatto(), u.getCognomeContatto());
+		return userRepo.save(newAdmin);
 	}
 
 	// ----------------------- GET SU SINGOLO USER -----------------------------
@@ -144,7 +154,8 @@ public class UserService {
 		return userRepo.findByFatturatoAnnualeBetween(minFatturato, maxFatturato, pageable);
 	}
 
-	public Page<User> findBydataInserimentoRange(LocalDate dataInserimentoFirst,LocalDate dataInserimentoSecond, int page, int size, String sortBy) {
+	public Page<User> findBydataInserimentoRange(LocalDate dataInserimentoFirst, LocalDate dataInserimentoSecond,
+			int page, int size, String sortBy) {
 		if (size < 0)
 			size = 20;
 		if (size > 100)
@@ -153,7 +164,8 @@ public class UserService {
 		return userRepo.findBydataInserimentoBetween(dataInserimentoFirst, dataInserimentoSecond, pageable);
 	}
 
-	public Page<User> findBydataUltimoContattoRange(LocalDate dataUltimoContattoFirst,LocalDate dataUltimoContattoSecond, int page, int size, String sortBy) {
+	public Page<User> findBydataUltimoContattoRange(LocalDate dataUltimoContattoFirst,
+			LocalDate dataUltimoContattoSecond, int page, int size, String sortBy) {
 		if (size < 0)
 			size = 20;
 		if (size > 100)

@@ -3,6 +3,7 @@ package app.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import app.auth.payloads.AuthenticationSuccessfullPayload;
 import app.entities.User;
 import app.exceptions.NotFoundException;
 import app.exceptions.UnauthorizedException;
+import app.payloads.AdminPayload;
 import app.payloads.UserPayload;
 import app.services.UserService;
 
@@ -33,6 +35,14 @@ public class AuthController {
 		body.setPassword(bcrypt.encode(body.getPassword()));
 		User createdUser = usersService.create(body);
 		return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+	}
+
+	@PostMapping("/register/admin")
+	@PreAuthorize("hasAuthority('ADMIN')")
+	public ResponseEntity<User> registerAdmin(@RequestBody @Validated AdminPayload body) {
+		body.setPassword(bcrypt.encode(body.getPassword()));
+		User createdAdmin = usersService.createAdmin(body);
+		return new ResponseEntity<>(createdAdmin, HttpStatus.CREATED);
 	}
 
 	@PostMapping("/login")
