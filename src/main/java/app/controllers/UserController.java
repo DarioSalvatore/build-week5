@@ -14,6 +14,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +32,7 @@ import app.entities.Bill;
 import app.entities.Council;
 import app.entities.District;
 import app.entities.User;
+import app.exceptions.UnauthorizedException;
 import app.payloads.UserPayload;
 import app.repositories.DistrictRepository;
 import app.repositories.UserRepository;
@@ -52,36 +55,35 @@ public class UserController {
 	@GetMapping("/filter")
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public Page<User> findByFatturatoAnnualeRange(@RequestParam("minFatturato") double minFatturato,
-			@RequestParam("maxFatturato") double maxFatturato, 
-			@RequestParam(defaultValue = "0") int page,
+			@RequestParam("maxFatturato") double maxFatturato, @RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size,
 			@RequestParam(defaultValue = "fatturatoAnnuale") String sortBy) {
 		return userService.findByFatturatoAnnualeRange(minFatturato, maxFatturato, page, size, sortBy);
 	}
 
-	// filtra per data range(GET: http://localhost:3001/users/date?startDateFirstRange=1995-05-15&startDateSecondRange=2000-05-15)
+	// filtra per data range(GET:
+	// http://localhost:3001/users/date?startDateFirstRange=1995-05-15&startDateSecondRange=2000-05-15)
 	@GetMapping("/date")
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public Page<User> findByDate(
 			@RequestParam("startDateFirstRange") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataInserimentoFirst,
 			@RequestParam("startDateSecondRange") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataInserimentoSecond,
-			@RequestParam(defaultValue = "0") int page, 
-			@RequestParam(defaultValue = "10") int size,
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
 			@RequestParam(defaultValue = "dataInserimento") String sortBy) {
 		return userService.findBydataInserimentoRange(dataInserimentoFirst, dataInserimentoSecond, page, size, sortBy);
 	}
 
-	// filtra per dataUltimoContatto per range 
+	// filtra per dataUltimoContatto per range
 	// http://localhost:3001/users/dateLastContact?dataUltimoContattoFirstRange=1980-12-11&dataUltimoContattoSecondRange=2004-10-27
 	@GetMapping("/dateLastContact")
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public Page<User> findBydataUltimoContatto(
 			@RequestParam("dataUltimoContattoFirstRange") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataUltimoContattoFirst,
 			@RequestParam("dataUltimoContattoSecondRange") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataUltimoContattoSecond,
-			@RequestParam(defaultValue = "0") int page, 
-			@RequestParam(defaultValue = "40") int size,
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "40") int size,
 			@RequestParam(defaultValue = "dataUltimoContatto") String sortBy) {
-		return userService.findBydataUltimoContattoRange(dataUltimoContattoFirst,dataUltimoContattoSecond, page, size, sortBy);
+		return userService.findBydataUltimoContattoRange(dataUltimoContattoFirst, dataUltimoContattoSecond, page, size,
+				sortBy);
 	}
 
 	// filtra per nome sia camel case che lower case
@@ -89,8 +91,7 @@ public class UserController {
 	@GetMapping("/name")
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public Page<User> findByName(@RequestParam("name") String name, @RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "10") int size, 
-			@RequestParam(defaultValue = "nomeContatto") String sortBy) {
+			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "nomeContatto") String sortBy) {
 		return userService.findBynomeContattoIgnoreCase(name, page, size, sortBy);
 	}
 
@@ -99,8 +100,7 @@ public class UserController {
 	@GetMapping("")
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public Page<User> getAllUsers(@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "20") int size, 
-			@RequestParam(defaultValue = "ragioneSociale") String sortBy) {
+			@RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "ragioneSociale") String sortBy) {
 		return userService.find(page, size, sortBy);
 	}
 
@@ -136,7 +136,15 @@ public class UserController {
 	// Versione 1 (PUT: http://localhost:3001/users/{idUser}) OK
 	@PutMapping("/{idUser}")
 	@PreAuthorize("hasAuthority('ADMIN')")
-	public ResponseEntity<User> register(@PathVariable UUID idUser, @RequestBody @Validated UserPayload body) {
+	public ResponseEntity<User> register(@PathVariable UUID idUser, @RequestBody @Validated UserPayload body)
+			throws UnauthorizedException {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		boolean isAdmin = authentication.getAuthorities().stream()
+				.anyMatch(auth -> auth.getAuthority().equals("ADMIN"));
+		System.out.println(isAdmin);
+		if (!isAdmin) {
+			throw new UnauthorizedException("Non si hanno i permessi necessari per effettuare questa operazione!");
+		}
 		User createdUser = userService.findByIdAndUpdate(idUser, body);
 		return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
 	}
