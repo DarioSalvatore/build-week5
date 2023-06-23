@@ -50,7 +50,8 @@ public class UserController {
 	// http://localhost:3001/users/filter?minFatturato=150&maxFatturato=180
 	@GetMapping("/filter")
 	public Page<User> findByFatturatoAnnualeRange(@RequestParam("minFatturato") double minFatturato,
-			@RequestParam("maxFatturato") double maxFatturato, @RequestParam(defaultValue = "0") int page,
+			@RequestParam("maxFatturato") double maxFatturato, 
+			@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size,
 			@RequestParam(defaultValue = "fatturatoAnnuale") String sortBy) {
 		return userService.findByFatturatoAnnualeRange(minFatturato, maxFatturato, page, size, sortBy);
@@ -61,26 +62,30 @@ public class UserController {
 	public Page<User> findByDate(
 			@RequestParam("startDateFirstRange") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataInserimentoFirst,
 			@RequestParam("startDateSecondRange") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataInserimentoSecond,
-			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
+			@RequestParam(defaultValue = "0") int page, 
+			@RequestParam(defaultValue = "10") int size,
 			@RequestParam(defaultValue = "dataInserimento") String sortBy) {
 		return userService.findBydataInserimentoRange(dataInserimentoFirst, dataInserimentoSecond, page, size, sortBy);
 	}
 
-	// filtra per dataUltimoContatto
-	// http://localhost:3001/users/dateLastContact?dataUltimoContatto=2000-09-01
+	// filtra per dataUltimoContatto per range 
+	// http://localhost:3001/users/dateLastContact?dataUltimoContattoFirstRange=1980-12-11&dataUltimoContattoSecondRange=2004-10-27
 	@GetMapping("/dateLastContact")
 	public Page<User> findBydataUltimoContatto(
-			@RequestParam("dataUltimoContatto") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataUltimoContatto,
-			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
+			@RequestParam("dataUltimoContattoFirstRange") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataUltimoContattoFirst,
+			@RequestParam("dataUltimoContattoSecondRange") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataUltimoContattoSecond,
+			@RequestParam(defaultValue = "0") int page, 
+			@RequestParam(defaultValue = "40") int size,
 			@RequestParam(defaultValue = "dataUltimoContatto") String sortBy) {
-		return userService.findBydataUltimoContatto(dataUltimoContatto, page, size, sortBy);
+		return userService.findBydataUltimoContattoRange(dataUltimoContattoFirst,dataUltimoContattoSecond, page, size, sortBy);
 	}
 
 	// filtra per nome sia camel case che lower case
 	// http://localhost:3001/users/name?name=elsa
 	@GetMapping("/name")
 	public Page<User> findByName(@RequestParam("name") String name, @RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "nomeContatto") String sortBy) {
+			@RequestParam(defaultValue = "10") int size, 
+			@RequestParam(defaultValue = "nomeContatto") String sortBy) {
 		return userService.findBynomeContattoIgnoreCase(name, page, size, sortBy);
 	}
 
@@ -88,7 +93,8 @@ public class UserController {
 	// Versione 1 (GET: http://localhost:3001/users) OK
 	@GetMapping("")
 	public Page<User> getAllUsers(@RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "ragioneSociale") String sortBy) {
+			@RequestParam(defaultValue = "20") int size, 
+			@RequestParam(defaultValue = "ragioneSociale") String sortBy) {
 		return userService.find(page, size, sortBy);
 	}
 

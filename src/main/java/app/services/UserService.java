@@ -153,13 +153,13 @@ public class UserService {
 		return userRepo.findBydataInserimentoBetween(dataInserimentoFirst, dataInserimentoSecond, pageable);
 	}
 
-	public Page<User> findBydataUltimoContatto(LocalDate dataUltimoContatto, int page, int size, String sortBy) {
+	public Page<User> findBydataUltimoContattoRange(LocalDate dataUltimoContattoFirst,LocalDate dataUltimoContattoSecond, int page, int size, String sortBy) {
 		if (size < 0)
 			size = 20;
 		if (size > 100)
 			size = 100;
 		Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-		return userRepo.findBydataUltimoContatto(dataUltimoContatto, pageable);
+		return userRepo.findBydataUltimoContattoBetween(dataUltimoContattoFirst, dataUltimoContattoSecond, pageable);
 	}
 
 	public Page<User> findBynomeContattoIgnoreCase(String name, int page, int size, String sortBy) {
