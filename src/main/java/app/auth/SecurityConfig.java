@@ -3,6 +3,7 @@ package app.auth;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -25,9 +26,11 @@ public class SecurityConfig {
 
 		http.csrf(c -> c.disable());
 
-		http.authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll());
-		http.authorizeHttpRequests(auth -> auth.requestMatchers("/users/**").authenticated());
-		http.authorizeHttpRequests(auth -> auth.requestMatchers("/bills/**").authenticated());
+		http.authorizeHttpRequests(
+				auth -> auth.requestMatchers("/auth/**").permitAll().requestMatchers(HttpMethod.GET, "/users/**")
+						.hasAnyAuthority("USER", "ADMIN").requestMatchers("/users/**").hasAuthority("ADMIN")
+						.requestMatchers(HttpMethod.GET, "/bills/**").hasAnyAuthority("USER", "ADMIN")
+						.requestMatchers("/bills/**").hasAuthority("ADMIN").anyRequest().authenticated());
 
 		http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 		http.addFilterBefore(corsFilter, JWTAuthFilter.class);

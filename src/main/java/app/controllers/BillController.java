@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,6 +39,7 @@ public class BillController {
 	// get all bills and order by name
 	// OK
 	@GetMapping("")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public Page<Bill> getAllBill(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "number") String sortBy) {
 		return billService.findAll(page, size, sortBy);
@@ -53,18 +55,21 @@ public class BillController {
 	// TEST
 	@PostMapping("")
 	@ResponseStatus(HttpStatus.CREATED)
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public Bill saveBill(@RequestBody @Validated BillPayload body) {
 		return billService.create2(body);
 	}
 
 	// Ok
 	@GetMapping("/{billId}")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public Bill getBill(@PathVariable UUID billId) throws NotFoundException {
 		return billService.findById(billId);
 	}
 
 	// OK
 	@PutMapping("/{billId}")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public Bill updateBill(@PathVariable UUID billId, @RequestBody Bill body) throws Exception {
 		return billService.findByIdAndUpdate(billId, body);
 	}
@@ -72,6 +77,7 @@ public class BillController {
 	// OK
 	@DeleteMapping("/{billId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public void deleteUser(@PathVariable UUID billId) throws NotFoundException {
 		billService.findByIdAndDelete(billId);
 	}
@@ -84,6 +90,7 @@ public class BillController {
 
 	// OK Aggiungere Paginazione
 	@GetMapping("/status")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public Page<Bill> getBillsByStatusBill(@RequestParam("status") StatusBill status,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
 			@RequestParam(defaultValue = "number") String sortBy) {
@@ -92,6 +99,7 @@ public class BillController {
 
 	// OK Aggiungere Paginazione
 	@GetMapping("/date")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public Page<Bill> getBillsByDate(@RequestParam("date") String date, @RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "number") String sortBy) {
 		LocalDate parsedDate = LocalDate.parse(date);
@@ -100,6 +108,7 @@ public class BillController {
 
 	// OK Aggiungere Paginazione
 	@GetMapping("/year")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public Page<Bill> getBillsByYear(@RequestParam("year") int year, @RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "number") String sortBy) {
 		return billService.getBillsByYear(year, page, size, sortBy);
@@ -107,6 +116,7 @@ public class BillController {
 
 	// OK Aggiungere Paginazione
 	@GetMapping("/rangeofamounts")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public Page<Bill> getBillsByAmount(@RequestParam("min") double min, @RequestParam("max") double max,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
 			@RequestParam(defaultValue = "number") String sortBy) {

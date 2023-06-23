@@ -61,7 +61,7 @@ public class User implements UserDetails {
 	@Enumerated(EnumType.STRING)
 	private UserType tipo;
 	@Enumerated(EnumType.STRING)
-	private UserRole ruolo = UserRole.USER;
+	private UserRole ruolo;
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	@JsonManagedReference
 	private List<Address> indirizzi;
@@ -89,6 +89,7 @@ public class User implements UserDetails {
 		this.tipo = tipo;
 		this.indirizzi = indirizzi;
 		this.fatture = fatture;
+		this.setRuolo(UserRole.USER);
 	}
 
 	public User(String ragioneSociale, String partitaIva, String email, double fatturatoAnnuale, String pec,
@@ -109,6 +110,16 @@ public class User implements UserDetails {
 		this.tipo = tipo;
 		this.indirizzi = indirizzi;
 		this.fatture = fatture;
+		this.setRuolo(UserRole.USER);
+	}
+
+	public User(String email, String password, String nomeContatto, String cognomeContatto) {
+
+		this.email = email;
+		this.password = password;
+		this.nomeContatto = nomeContatto;
+		this.cognomeContatto = cognomeContatto;
+		this.setRuolo(UserRole.ADMIN);
 	}
 
 	@Override

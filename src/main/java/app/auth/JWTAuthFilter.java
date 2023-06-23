@@ -22,7 +22,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class JWTAuthFilter extends OncePerRequestFilter {
 	@Autowired
-	UserService usersService;
+	private UserService userService;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -40,36 +40,29 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 		JWTTools.isTokenValid(accessToken);
 
 		// 3. Se OK
-
 		// 3.0 Estraggo l'email dal token e cerco l'utente
 		String email = JWTTools.extractSubject(accessToken);
 
 		try {
-			User user = usersService.findByEmail(email);
+			User user = userService.findByEmail(email);
 
 			// 3.1 Aggiungo l'utente al SecurityContextHolder
-
 			UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user, null,
 					user.getAuthorities());
 			authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
 			SecurityContextHolder.getContext().setAuthentication(authToken);
 
-			// 3.2 puoi procedere al prossimo blocco della filterChain
+			// 3.2 Puoi procedere al prossimo blocco della filterChain
 			filterChain.doFilter(request, response);
 		} catch (NotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			throw new UnauthorizedException("Accesso negato. L'utente non esiste.");
 		}
-
-		// 4. Se non OK -> 401 ("Per favore effettua di nuovo il login")
 	}
 
 	// Per evitare che il filtro venga eseguito per OGNI richiesta
-
 	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) {
 		return new AntPathMatcher().match("/auth/**", request.getServletPath());
 	}
-
 }

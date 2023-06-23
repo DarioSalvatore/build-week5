@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,6 +50,7 @@ public class UserController {
 	// FatturatoAnnuale dato un range : (GET:
 	// http://localhost:3001/users/filter?minFatturato=150&maxFatturato=180
 	@GetMapping("/filter")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public Page<User> findByFatturatoAnnualeRange(@RequestParam("minFatturato") double minFatturato,
 			@RequestParam("maxFatturato") double maxFatturato, @RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size,
@@ -58,6 +60,7 @@ public class UserController {
 
 	// filtra per data (GET: http://localhost:3001/users/date?startDate=1962-11-30)
 	@GetMapping("/date")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public Page<User> findByDate(
 			@RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataInserimento,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
@@ -68,6 +71,7 @@ public class UserController {
 	// filtra per dataUltimoContatto
 	// http://localhost:3001/users/dateLastContact?dataUltimoContatto=2000-09-01
 	@GetMapping("/dateLastContact")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public Page<User> findBydataUltimoContatto(
 			@RequestParam("dataUltimoContatto") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataUltimoContatto,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
@@ -78,6 +82,7 @@ public class UserController {
 	// filtra per nome sia camel case che lower case
 	// http://localhost:3001/users/name?name=elsa
 	@GetMapping("/name")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public Page<User> findByName(@RequestParam("name") String name, @RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "nomeContatto") String sortBy) {
 		return userService.findBynomeContattoIgnoreCase(name, page, size, sortBy);
@@ -86,6 +91,7 @@ public class UserController {
 	// -------------------------- GET SU USERS -----------------------------
 	// Versione 1 (GET: http://localhost:3001/users) OK
 	@GetMapping("")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public Page<User> getAllUsers(@RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "ragioneSociale") String sortBy) {
 		return userService.find(page, size, sortBy);
@@ -95,6 +101,7 @@ public class UserController {
 	// Versione 2 e payload (POST: http://localhost:3001/users) OK
 	@PostMapping("")
 	@ResponseStatus(HttpStatus.CREATED)
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public User saveUser(@RequestBody @Validated UserPayload body) {
 		return userService.create(body);
 	}
@@ -102,6 +109,7 @@ public class UserController {
 	// ----------------------- GET SU SINGOLO USER -----------------------------
 	// Versione 1 (GET: http://localhost:3001/users/{idUser}) OK
 	@GetMapping("/{idUser}")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public User getUser(@PathVariable UUID idUser) throws Exception {
 		return userService.findById(idUser);
 	}
@@ -110,6 +118,7 @@ public class UserController {
 	// Versione 1 (GET: http://localhost:3001/users/{idUser}/dispositivi) OK
 
 	@GetMapping("/{idUser}/bills")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public Page<Bill> findBillsUser(@PathVariable UUID idUser, @RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "20") int size, @RequestParam(defaultValue = "number") String sortBy) {
 		Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
@@ -118,13 +127,8 @@ public class UserController {
 
 	// ----------------------- PUT SU SINGOLO USER -----------------------------
 	// Versione 1 (PUT: http://localhost:3001/users/{idUser}) OK
-//	@PutMapping("/{idUser}")
-//	public User updateUser(@PathVariable UUID idUser, @RequestBody User body) throws Exception {
-//		return userService.findByIdAndUpdate(idUser, body);
-//	}
-
-	// TEST
 	@PutMapping("/{idUser}")
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public ResponseEntity<User> register(@PathVariable UUID idUser, @RequestBody @Validated UserPayload body) {
 		User createdUser = userService.findByIdAndUpdate(idUser, body);
 		return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
@@ -134,11 +138,13 @@ public class UserController {
 	// Versione 1 (DELETE: http://localhost:3001/users/{idUser}) OK
 	@DeleteMapping("/{idUser}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PreAuthorize("hasAuthority('ADMIN')")
 	public void deleteUser(@PathVariable UUID idUser) throws Exception {
 		userService.findByIdAndDelete(idUser);
 	}
 
 	@GetMapping("/district")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public Page<User> findByProvincia(@RequestParam("provincia") String provincia,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 		Pageable pageable = PageRequest.of(page, size);
@@ -146,6 +152,7 @@ public class UserController {
 	}
 
 	@GetMapping("/{ragioneSociale}/sede_legale")
+	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
 	public ResponseEntity<Map<String, String>> getSedeLegaleByRagioneSociale(
 			@PathVariable("ragioneSociale") String ragioneSociale) {
 		Council comune = userService.getComuneByRagioneSociale(ragioneSociale);
