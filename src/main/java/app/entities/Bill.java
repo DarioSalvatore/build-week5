@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -38,7 +36,7 @@ public class Bill {
 	private static Integer lastGeneratedNumber = 0;
 
 	@ManyToOne
-	@JsonBackReference
+//	@JsonBackReference
 	private User user;
 
 	public Bill(Integer year, LocalDate date, BigDecimal amount, StatusBill statusBill, User user) {
