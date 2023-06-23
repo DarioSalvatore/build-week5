@@ -23,7 +23,7 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 
 	Page<User> findByFatturatoAnnualeBetween(double minFatturato, double maxFatturato, Pageable pageable);
 
-	Page<User> findBydataInserimento(LocalDate dataInserimento, Pageable pageable);
+	Page<User> findBydataInserimentoBetween(LocalDate dataInserimentoFirst, LocalDate dataInserimentoSecond, Pageable pageable);
 
 	Page<User> findBydataUltimoContatto(LocalDate dataUltimoContatto, Pageable pageable);
 

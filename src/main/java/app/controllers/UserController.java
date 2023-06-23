@@ -56,13 +56,14 @@ public class UserController {
 		return userService.findByFatturatoAnnualeRange(minFatturato, maxFatturato, page, size, sortBy);
 	}
 
-	// filtra per data (GET: http://localhost:3001/users/date?startDate=1962-11-30)
+	// filtra per data range(GET: http://localhost:3001/users/date?startDateFirstRange=1995-05-15&startDateSecondRange=2000-05-15)
 	@GetMapping("/date")
 	public Page<User> findByDate(
-			@RequestParam("startDate") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataInserimento,
+			@RequestParam("startDateFirstRange") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataInserimentoFirst,
+			@RequestParam("startDateSecondRange") @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate dataInserimentoSecond,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
 			@RequestParam(defaultValue = "dataInserimento") String sortBy) {
-		return userService.findBydataInserimento(dataInserimento, page, size, sortBy);
+		return userService.findBydataInserimentoRange(dataInserimentoFirst, dataInserimentoSecond, page, size, sortBy);
 	}
 
 	// filtra per dataUltimoContatto
