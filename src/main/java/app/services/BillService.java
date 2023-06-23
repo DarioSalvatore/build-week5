@@ -89,22 +89,22 @@ public class BillService {
 		return billRepo.findByStatusBill(status, pageable);
 	}
 
-	public Page<Bill> getBillsByDate(LocalDate date, int page, int size, String sortBy) {
+	public Page<Bill> getBillsByDate(LocalDate startDate, LocalDate endDate, int page, int size, String sortBy) {
 		if (size < 0)
 			size = 20;
 		if (size > 100)
 			size = 100;
 		Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-		return billRepo.findByDate(date, pageable);
+		return billRepo.findByDateBetween(startDate, endDate, pageable);
 	}
 
-	public Page<Bill> getBillsByYear(int year, int page, int size, String sortBy) {
+	public Page<Bill> getBillsByYear(int startYear, int endYear, int page, int size, String sortBy) {
 		if (size < 0)
 			size = 20;
 		if (size > 100)
 			size = 100;
 		Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-		return billRepo.findByYear(year, pageable);
+		return billRepo.findByYearBetween(startYear, endYear, pageable);
 	}
 
 	public Page<Bill> getBillsByAmount(double min, double max, int page, int size, String sortBy) {

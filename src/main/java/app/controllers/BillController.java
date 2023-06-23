@@ -99,19 +99,22 @@ public class BillController {
 
 	// OK Aggiungere Paginazione
 	@GetMapping("/date")
+	public Page<Bill> getBillsByDate(@RequestParam("startDate") String startDate,
+			@RequestParam("endDate") String endDate, @RequestParam(defaultValue = "0") int page,
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-	public Page<Bill> getBillsByDate(@RequestParam("date") String date, @RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "number") String sortBy) {
-		LocalDate parsedDate = LocalDate.parse(date);
-		return billService.getBillsByDate(parsedDate, page, size, sortBy);
+		LocalDate parsedStartDate = LocalDate.parse(startDate);
+		LocalDate parsedEndDate = LocalDate.parse(endDate);
+		return billService.getBillsByDate(parsedStartDate, parsedEndDate, page, size, sortBy);
 	}
 
 	// OK Aggiungere Paginazione
 	@GetMapping("/year")
+	public Page<Bill> getBillsByYear(@RequestParam("startYear") int startYear, @RequestParam("endYear") int endYear,
+			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
+			@RequestParam(defaultValue = "number") String sortBy) {
+		return billService.getBillsByYear(startYear, endYear, page, size, sortBy);
 	@PreAuthorize("hasAnyRole('ADMIN', 'USER')")
-	public Page<Bill> getBillsByYear(@RequestParam("year") int year, @RequestParam(defaultValue = "0") int page,
-			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "number") String sortBy) {
-		return billService.getBillsByYear(year, page, size, sortBy);
 	}
 
 	// OK Aggiungere Paginazione
