@@ -15,9 +15,9 @@ import app.entities.User;
 
 @Repository
 public interface BillRepository extends JpaRepository<Bill, UUID> {
-	Page<Bill> findByYear(int year, Pageable pageable);
+	Page<Bill> findByYearBetween(int startYear, int endYear, Pageable pageable);
 
-	Page<Bill> findByDate(LocalDate date, Pageable pageable);
+	Page<Bill> findByDateBetween(LocalDate startDate, LocalDate endDate, Pageable pageable);
 
 	Page<Bill> findByAmountBetween(@Param("min") double min, @Param("max") double max, Pageable pageable);
 
