@@ -3,8 +3,8 @@ package app.entities;
 import java.util.List;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -33,7 +33,8 @@ public class District {
 	@Column(name = "Regione")
 	private String regione;
 	@OneToMany(mappedBy = "provincia")
-	@JsonManagedReference
+//	@JsonManagedReference
+	@JsonIgnore
 	private List<Council> comuni;
 
 	public District(String provincia, String sigla, String regione, List<Council> comuni) {

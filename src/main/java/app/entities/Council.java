@@ -3,8 +3,7 @@ package app.entities;
 import java.util.List;
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -29,11 +28,12 @@ public class Council {
 	private String progressivoComune;
 	private String denominazione;
 	@ManyToOne
-	@JsonBackReference
+//	@JsonBackReference
 	private District provincia;
 
 	@OneToMany(mappedBy = "comune")
-	@JsonManagedReference
+//	@JsonManagedReference
+	@JsonIgnore
 	private List<Address> indirizzi;
 
 	public Council(String codiceStorico, String progressivoComune, String denominazione, District provincia,

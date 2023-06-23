@@ -2,7 +2,6 @@ package app.entities;
 
 import java.util.UUID;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Entity;
@@ -35,10 +34,10 @@ public class Address {
 	@Enumerated(EnumType.STRING)
 	private AddressType tipo;
 	@ManyToOne
-	@JsonBackReference
+//	@JsonBackReference
 	private User user;
 	@ManyToOne
-	@JsonBackReference
+//	@JsonBackReference
 	private Council comune;
 
 	public Address(String via, String civico, String località, int cap, AddressType tipo, User user, Council comune) {
